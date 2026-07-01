@@ -220,7 +220,6 @@ const stores = await sanityClient.fetch<
 
         <div class="absolute inset-0 bg-black/50"></div>
 
-        <!-- Quote fades out as you scroll down -->
         <div
           class="scroll-fade-out absolute inset-0 flex flex-col items-center justify-center text-white"
         >
@@ -247,12 +246,6 @@ const stores = await sanityClient.fetch<
       </div>
     </div>
 
-    <!-- <div class="flex h-[30vh] w-full content-center bg-green-300">
-      <div><span class="text-xl font-bold">Hand Made By Claire</span></div>
-      <div class="h-[20vh] font-tempus">
-        <Description description={front_page_info.message} />
-      </div>
-    </div> -->
     <div
       id="Calendar"
       class="w-full bg-taupe-100 flex flex-col items-center pl-10 pr-10 p-8 box-shadow-xl"
@@ -269,7 +262,7 @@ const stores = await sanityClient.fetch<
       </div>
     </div>
     <!-- . #abcedb -->
-    <div id="Shops" class="min-w-0 bg-[#b6d1db] p-8">
+    <div id="Shops" class="min-w-0 bg-[#b6d1db]">
       <h2
         class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
       >
@@ -288,7 +281,7 @@ const stores = await sanityClient.fetch<
           class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-blue-100 to-transparent z-10 pointer-events-none"
         >
         </div> -->
-        <HorizontalScroll>
+        <HorizontalScroll center={true}>
           {
             stores.map((store) => (
               <ScrollCard>

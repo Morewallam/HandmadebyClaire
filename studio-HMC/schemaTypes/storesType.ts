@@ -52,7 +52,8 @@ export const storeType = defineType({
     }),
      defineField({
           name: "order",
-          type:"number"
+          type:"number",
+          initialValue: 999
       }),
   ],
 })

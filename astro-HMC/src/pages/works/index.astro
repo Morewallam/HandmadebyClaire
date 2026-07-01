@@ -96,7 +96,7 @@ const occasions = await sanityClient.fetch<SanityDocument[]>(OCCASION_QUERY);
 
 <MainLayout>
   <div class="bg-olive-200">
-    <div class="mx-auto p-6 sm:p-8">
+    <div class="mx-auto pt-6 pb-6 sm:pt-8 sm:pb-8">
       <!-- <h1
         class="text-4xl font-bold tracking-tight text-gray-900 text-center pb-10 underline"
       >
@@ -108,7 +108,7 @@ const occasions = await sanityClient.fetch<SanityDocument[]>(OCCASION_QUERY);
       <HorizontalScroll>
         {
           categories.map((cat) => (
-            <ScrollCard padding="">
+            <ScrollCard>
               <ThemeCard
                 image={cat.image}
                 slug={cat.slug}
