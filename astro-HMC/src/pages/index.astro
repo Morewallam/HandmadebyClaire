@@ -1,0 +1,357 @@
+---
+import "../styles/global.css";
+
+import { sanityClient } from "sanity:client";
+import Calendar from "../components/Calendar";
+import { urlFor } from "../helper/imageUrlHelper";
+import ArtProduct from "../components/ArtProduct.astro";
+import type { PortableTextBlock, SanityDocument } from "sanity";
+import ImageRender from "../components/ImageRender.astro";
+import type { SanityImageSource } from "@sanity/image-url";
+import { string } from "astro:schema";
+import HorizontalScroll from "../components/HorizontalScroll.astro";
+import ScrollCard from "../components/ScrollCard.astro";
+import Description from "../components/Description.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { Vimeo } from "@astro-community/astro-embed-vimeo";
+import StoreCard from "../components/StoreCard.astro";
+import { Image } from "astro:assets";
+import { studioPath } from "@sanity/client/csm";
+
+const FRONT_PAGE_QUERY = `*[
+  _type == "frontpage"][1]{
+    _id, 
+    quote,
+    message,
+    main_image,
+    section_name,
+    highlights[]->{
+      IndividualProductName,
+      slug,
+      MainImage,
+      Category->{
+        title
+      },
+      Theme->{
+        title
+      },
+    },
+    video_URL,
+    studio_image,
+    studio_description
+    }`;
+
+const front_page_info = await sanityClient.fetch<{
+  _id: string;
+  quote: string;
+  message: PortableTextBlock;
+  main_image: SanityImageSource;
+  section_name: string;
+  highlights: {
+    IndividualProductName: string;
+    slug: { current: string };
+    MainImage: SanityImageSource;
+    Category: { title: string };
+    Theme: { title: string };
+  }[];
+  video_URL: string;
+  studio_image: SanityImageSource;
+  studio_description: PortableTextBlock;
+}>(FRONT_PAGE_QUERY);
+
+// console.log(front_page_info);
+
+const events = await sanityClient.fetch(`
+  *[_type == "event"] {
+    "title": EventName,
+    "description": Description,
+    "address": Address,
+    "url": Stall,
+    "image": Image,
+    schedule[] {
+      date,
+      startTime,
+      endTime
+    }
+  }
+`);
+
+const calendarEvents = events.flatMap((event: any) =>
+  event.schedule.map((day: any) => ({
+    title: event.title,
+    start: `${day.date}T${day.startTime}`,
+    end: `${day.date}T${day.endTime}`,
+    extendedProps: {
+      description: event.description, // pass the raw block array, not pt::text()
+      address: event.address,
+      url: event.url,
+      image: urlFor(event.image).url(),
+    },
+  })),
+);
+
+// console.log(front_page_info);
+const videoId: string = front_page_info.video_URL?.split("/").pop() || " ";
+const quoteParts: string[] = front_page_info.quote.split("-");
+
+const quoteLines: string[] = quoteParts[0].split("\n");
+
+const STORE_QUERY = `
+  *[_type == "store"] {
+    StoreName,
+    slug,
+    Image,
+    Description, 
+    Address,
+    URL,
+    ProductsSold[]->{
+      title,
+      slug,
+      image,
+    }
+  }
+`;
+const stores = await sanityClient.fetch<
+  {
+    StoreName: string;
+    slug?: { current: string };
+    Image: SanityImageSource;
+    Description: PortableTextBlock;
+    ProductsSold: {
+      image: SanityImageSource;
+      title: string;
+      slug: { current: string };
+    }[]; //Products
+    Address?: string;
+    URL?: string;
+  }[]
+>(STORE_QUERY);
+---
+
+<MainLayout title="Handmade By Claire">
+  <div class="bg-olive-200">
+    <div>
+      <div id="Main Image" class="relative w-full h-[95vh] overflow-hidden">
+        <ImageRender
+          image={front_page_info.main_image}
+          style="w-full h-full object-cover object-center"
+          width={2000}
+        />
+
+        <!-- Gradient overlay -->
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30"
+        >
+        </div>
+
+        <!-- Text at bottom -->
+        <div
+          class="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-12 text-white"
+        >
+          <h1 class="font-tempus text-7xl mb-2 text-center">
+            Handmade By Claire
+          </h1>
+          <p
+            class="text-lg mb-8 tracking-widest text-center uppercase opacity-80"
+          >
+            Original Textile Art
+          </p>
+          <a
+            href="/works"
+            class="border border-white text-white px-8 py-3
+        tracking-widest uppercase text-sm hover:bg-white hover:text-black
+        transition-colors duration-300"
+          >
+            Browse
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- bg-[#c0d49e] -->
+    <div
+      id="Highlights Section"
+      class="w-full flex flex-col items-center pt-6 pb-6 content-center box-shadow-xl"
+    >
+      <h2
+        class="text-5xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
+      >
+        {front_page_info.section_name}
+        <div class="mx-auto mt-2 mb-1 w-60 h-[2px] bg-taupe-700 rounded-full">
+        </div>
+      </h2>
+      <div class="w-full min-w-0 relative">
+        <!-- <div
+          class="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-[#c0d49e] to-transparent z-10 pointer-events-none"
+        >
+        </div>
+        <div
+          class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-[#c0d49e] to-transparent z-10 pointer-events-none"
+        >
+        </div> -->
+        <HorizontalScroll center={true}>
+          {
+            front_page_info.highlights.map((prod) => (
+              <ScrollCard>
+                <div class="w-60">
+                  <ArtProduct
+                    image={prod.MainImage}
+                    name={prod.IndividualProductName}
+                    slug={prod.slug}
+                    theme={prod.Theme.title}
+                    type={prod.Category.title}
+                  />
+                </div>
+              </ScrollCard>
+            ))
+          }
+        </HorizontalScroll>
+      </div>
+    </div>
+
+    <div id="Hero" class="relative h-[200vh]">
+      <div class="sticky top-0 h-[100vh] overflow-hidden">
+        <!-- Video background -->
+        <iframe
+          src={`https://player.vimeo.com/video/${videoId}?background=1&autoplay=1&loop=1&muted=1&autopause=0`}
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          style="min-width: 177.77vh; min-height: 56.25vw; width: 100%; height: 100%;"
+          frameborder="0"
+          allow="autoplay; fullscreen; picture-in-picture"></iframe>
+
+        <div class="absolute inset-0 bg-black/50"></div>
+
+        <!-- Quote fades out as you scroll down -->
+        <div
+          class="scroll-fade-out absolute inset-0 flex flex-col items-center justify-center text-white"
+        >
+          {
+            quoteLines.map((line) => (
+              <h1 class="p-2 text-l sm:text-2xl md:text-4xl font-bold">
+                {line}
+              </h1>
+            ))
+          }
+          <p class="mt-5 text-md sm:text-xl md:text-3xl">-{quoteParts[1]}</p>
+        </div>
+
+        <!-- Message fades in after quote -->
+        <div
+          class="scroll-fade-in absolute inset-0 flex flex-col items-center justify-center text-white"
+        >
+          <div
+            class="text-l sm:text-2xl md:text-3xl font-bold [&_p]:leading-loose [&_p]:mb-4 w-[60vw] text-center"
+          >
+            <Description description={front_page_info.message} />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="flex h-[30vh] w-full content-center bg-green-300">
+      <div><span class="text-xl font-bold">Hand Made By Claire</span></div>
+      <div class="h-[20vh] font-tempus">
+        <Description description={front_page_info.message} />
+      </div>
+    </div> -->
+    <div
+      id="Calendar"
+      class="w-full bg-taupe-100 flex flex-col items-center pl-10 pr-10 p-8 box-shadow-xl"
+    >
+      <h2
+        class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
+      >
+        Calendar
+        <div class="mx-auto mt-2 mb-5 w-60 h-[2px] bg-taupe-700 rounded-full">
+        </div>
+      </h2>
+      <div class="bg-white/80 w-full rounded-lg max-w-[80vw]">
+        <Calendar events={calendarEvents} client:visible />
+      </div>
+    </div>
+    <!-- . #abcedb -->
+    <div id="Shops" class="min-w-0 bg-[#b6d1db] p-8">
+      <h2
+        class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
+      >
+        Find Us
+        <div
+          class="mx-auto mt-2 mb-5 w-60 pl-3 pr-3 h-[2px] bg-taupe-700 rounded-full"
+        >
+        </div>
+      </h2>
+      <div class="w-full min-w-0 relative">
+        <!-- <div
+          class="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-blue-100 to-transparent z-10 pointer-events-none"
+        >
+        </div>
+        <div
+          class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-blue-100 to-transparent z-10 pointer-events-none"
+        >
+        </div> -->
+        <HorizontalScroll>
+          {
+            stores.map((store) => (
+              <ScrollCard>
+                <StoreCard
+                  storeName={store.StoreName}
+                  description={store.Description}
+                  storeImage={store.Image}
+                  products={store.ProductsSold}
+                  address={store.Address}
+                  url={store.URL}
+                />
+              </ScrollCard>
+            ))
+          }
+        </HorizontalScroll>
+      </div>
+    </div>
+    <div id="Studio Info" . class="bg-stone-100 p-8">
+      <h2
+        class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
+      >
+        Studio
+        <!-- <div
+          class="mx-auto mt-2 mb-5 w-50 md:w-xl h-[2px] bg-taupe-700 rounded-full"
+        >
+        </div> -->
+      </h2>
+      <div class="flex flex-col md:flex-row">
+        <div>
+          <ImageRender
+            image={front_page_info.studio_image}
+            width={500}
+            style="w-full object-cover md:h-full "
+          />
+        </div>
+        <div class="text-lg p-5">
+          <Description description={front_page_info.studio_description} />
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<script>
+  const hero = document.getElementById("Hero");
+  const fadeOut = document.querySelector(".scroll-fade-out") as HTMLElement;
+  const fadeIn = document.querySelector(".scroll-fade-in") as HTMLElement;
+
+  window.addEventListener("scroll", () => {
+    if (!hero || !fadeOut || !fadeIn) return;
+
+    const heroHeight = hero.getBoundingClientRect().height;
+    const scrolled = window.scrollY - hero.offsetTop;
+    const progress = scrolled / heroHeight;
+
+    // Quote fades out between 0% and 15% scroll
+    const outProgress = Math.max(0, Math.min((progress - 0.05) / 0.2, 1));
+    fadeOut.style.opacity = String(1 - outProgress);
+    fadeOut.style.transform = `translateY(${-40 * outProgress}px)`;
+
+    // Message fades in between 15% and 30% scroll
+    const inProgress = Math.max(0, Math.min((progress - 0.2) / 0.15, 1));
+    fadeIn.style.opacity = String(inProgress);
+    fadeIn.style.transform = `translateY(${40 * (1 - inProgress)}px)`;
+  });
+</script>

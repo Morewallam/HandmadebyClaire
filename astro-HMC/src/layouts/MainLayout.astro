@@ -1,0 +1,210 @@
+---
+import "../styles/global.css";
+const { title } = Astro.props;
+import { Font } from "astro:assets";
+---
+
+<style>
+  html,
+  body {
+    overscroll-behavior-y: none;
+  }
+</style>
+<html lang="en" class="bg-green-900/90">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+    <Font cssVariable="--font-tempus" />
+  </head>
+  <body class="font-seriff bg-olive-200">
+    <header
+      class="sticky top-0 z-50 bg-green-900/90 backdrop-blur-sm border-b border-green-800 h-15 flex items-center justify-between pl-10 pr-5"
+    >
+      <a
+        href="/"
+        class="font-tempus text-xl tracking-wide text-white hover:text-stone-100 transition-colors"
+      >
+        Handmade By Claire
+      </a>
+      <nav class="flex gap-6 text-sm tracking-widest uppercase text-white">
+        <a href="/" class="hover:text-white transition-colors">Home</a>
+        <a href="/works" class="hover:text-white transition-colors">Browse</a>
+        <a href="#Contact" class="hover:text-white transition-colors"
+          >Contact Me</a
+        >
+      </nav>
+    </header>
+    <slot />
+    <footer class="w-full bg-taupe-800 text-taupe-100 pt-12 pb-6 px-10">
+      <div
+        class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 pb-10 border-b border-taupe-600"
+      >
+        <!-- Brand -->
+        <div class="flex flex-col gap-3">
+          <span class="font-tempus text-2xl tracking-wide"
+            >Handmade By Claire</span
+          >
+          <p class="text-sm text-taupe-300 leading-relaxed">
+            Original Textile Art
+          </p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex flex-col gap-2">
+          <span class="text-xs uppercase tracking-widest text-taupe-400 mb-1"
+            >Explore</span
+          >
+          <a href="/" class="text-sm hover:text-white transition-colors">Home</a
+          >
+          <a href="/works" class="text-sm hover:text-white transition-colors"
+            >Browse Works</a
+          >
+          <a href="/#Shops" class="text-sm hover:text-white transition-colors"
+            >Find Us</a
+          >
+        </div>
+
+        <!-- www.facebook.com/HandmadebyClaireStationery -->
+
+        <!-- Contact & Social -->
+        <div id="Contact" class="flex flex-col gap-2">
+          <span class="text-xs uppercase tracking-widest text-taupe-400 mb-1"
+            >Get in Touch</span
+          >
+          <a
+            href="mailto:handmadebyclairestationary@gmail.com"
+            class="text-sm hover:text-white transition-colors"
+          >
+            <!-- <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              class="w-5 h-5"
+              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier">
+                <path
+                  d="M4 18L9 12M20 18L15 12M3 8L10.225 12.8166C10.8665 13.2443 11.1872 13.4582 11.5339 13.5412C11.8403 13.6147 12.1597 13.6147 12.4661 13.5412C12.8128 13.4582 13.1335 13.2443 13.775 12.8166L21 8M6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V8.2C21 7.0799 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.07989 19 6.2 19Z"
+                  stroke="currentColor"
+                  stroke-width="1.464"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </g></svg
+            > -->
+            handmadebyclairestationary@gmail.com
+          </a>
+          <a
+            href="tel:+16042228507"
+            class="text-sm hover:text-white transition-colors"
+          >
+            <!-- <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              class="w-5 h-5"
+              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier">
+                <path
+                  d="M4 18L9 12M20 18L15 12M3 8L10.225 12.8166C10.8665 13.2443 11.1872 13.4582 11.5339 13.5412C11.8403 13.6147 12.1597 13.6147 12.4661 13.5412C12.8128 13.4582 13.1335 13.2443 13.775 12.8166L21 8M6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V8.2C21 7.0799 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.07989 19 6.2 19Z"
+                  stroke="currentColor"
+                  stroke-width="1.464"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </g></svg
+            > -->
+            604&#8209;222&#8209;8507
+          </a>
+          <div class="flex gap-4 mt-2">
+            <!-- Instagram -->
+            <!-- <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-taupe-300 hover:text-white transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <rect
+                  x="2"
+                  y="2"
+                  width="20"
+                  height="20"
+                  rx="5"
+                  ry="5"
+                  stroke-width="1.5"></rect>
+                <circle cx="12" cy="12" r="4" stroke-width="1.5"></circle>
+                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"></circle>
+              </svg>
+            </a> -->
+
+            <!-- Facebook -->
+            <a
+              href="https://www.facebook.com/HandmadebyClaireStationery "
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-taupe-300 hover:text-white transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M20 1C21.6569 1 23 2.34315 23 4V20C23 21.6569 21.6569 23 20 23H4C2.34315 23 1 21.6569 1 20V4C1 2.34315 2.34315 1 4 1H20ZM20 3C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H15V13.9999H17.0762C17.5066 13.9999 17.8887 13.7245 18.0249 13.3161L18.4679 11.9871C18.6298 11.5014 18.2683 10.9999 17.7564 10.9999H15V8.99992C15 8.49992 15.5 7.99992 16 7.99992H18C18.5523 7.99992 19 7.5522 19 6.99992V6.31393C19 5.99091 18.7937 5.7013 18.4813 5.61887C17.1705 5.27295 16 5.27295 16 5.27295C13.5 5.27295 12 6.99992 12 8.49992V10.9999H10C9.44772 10.9999 9 11.4476 9 11.9999V12.9999C9 13.5522 9.44771 13.9999 10 13.9999H12V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H20Z"
+                  fill="currentColor"></path>
+              </svg>
+
+              <!-- Pinterest -->
+              <!-- <a
+                href="https://pinterest.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-taupe-300 hover:text-white transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.64 1.267 1.408 0 .858-.546 2.14-.828 3.33-.236.995.499 1.806 1.476 1.806 1.772 0 3.137-1.868 3.137-4.566 0-2.387-1.717-4.057-4.168-4.057-2.838 0-4.502 2.129-4.502 4.332 0 .857.33 1.776.741 2.279a.3.3 0 0 1 .069.286c-.076.315-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z"
+                  ></path>
+                </svg>
+              </a> -->
+            </a>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div
+          class="max-w-5xl mx-auto pt-6 text-center text-xs text-taupe-400 tracking-wide"
+        >
+          © {new Date().getFullYear()} Hand Made By Claire. All rights reserved.
+        </div>
+        <div class="pt-6 text-center text-xs text-taupe-400 tracking-wide">
+          Website designed and developed by Sean Wallace. Contact me at <a
+            href="mailto:swallace987@gmail.com"><u>swallace987@gmail.com</u></a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

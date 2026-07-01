@@ -1,0 +1,24 @@
+---
+interface Props {
+  gap?: string;
+  padding?: string;
+  margin?: string;
+  center?: boolean;
+}
+
+const {
+  gap = "gap-6",
+  padding = "pt-8 pb-14",
+  margin = "",
+  center = false,
+} = Astro.props;
+---
+
+<div
+  class=`relative flex w-full ${gap} overflow-x-auto ${padding} ${margin} scroll-smooth
+  [scroll-snap-type:x_mandatory] [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`
+>
+  {center && <div class="flex-1 shrink-0" />}
+  <slot />
+  {center && <div class="flex-1 shrink-0" />}
+</div>

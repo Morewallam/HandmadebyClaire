@@ -1,0 +1,27 @@
+---
+const { description } = Astro.props;
+import { toHTML } from "@portabletext/to-html";
+
+const descriptionHTML = toHTML(description, {
+  handlers: {
+    block: ({ value, next }) => {
+      const hasContent = value.children?.some(
+        (child) => child.text?.trim() !== "",
+      );
+      if (!hasContent) return "<br>";
+      return `<p>${next(value.children)}</p>`;
+    },
+  },
+});
+---
+
+<div class="description" set:html={descriptionHTML} />
+
+<style>
+  .description p {
+    margin-bottom: 1em;
+  }
+  .description p:last-child {
+    margin-bottom: 0;
+  }
+</style>

@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* body {
+  font-family: var(--font-tempus);
+} */
+
+@theme inline {
+  --font-seriff: var(--font-tempus);
+}
+
+/* @supports (animation-timeline: scroll()) {
+  .scroll-fade-out {
+    animation: fadeOut linear forwards;
+    animation-timeline: scroll();
+    animation-range: 0% 40%;
+  }
+
+  .scroll-fade-in {
+    animation: fadeIn linear forwards;
+    animation-timeline: scroll();
+    animation-range: 30% 60%;
+  }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-40px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+} */
+
+.scroll-fade-out {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-fade-in {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}

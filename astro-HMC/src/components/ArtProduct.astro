@@ -1,0 +1,27 @@
+---
+import "../styles/global.css";
+import ImageRender from "./ImageRender.astro";
+
+const { image, name, theme, type, size, slug } = Astro.props;
+---
+
+<a href={`/works/${slug.current}`} class="block">
+  <div
+    class="p-4 rounded-sm shadow-xs bg-stone-100 group transition-transform duration-300 hover:scale-110"
+  >
+    <ImageRender
+      image={image}
+      width={500}
+      style="aspect-rectangle w-full drop-shadow rounded-md h-80 object-contain group-hover:opacity-95 object-center"
+    />
+    <div class="mt-4">
+      <div>
+        <h3 class="text-md text-gray-700">
+          <span aria-hidden="true" class="inset-0"></span>
+          {name}
+        </h3>
+      </div>
+      <p class="text-sm font-medium text-gray-400">{type}</p>
+    </div>
+  </div>
+</a>

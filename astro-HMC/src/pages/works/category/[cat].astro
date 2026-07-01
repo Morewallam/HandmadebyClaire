@@ -1,0 +1,94 @@
+---
+import "../../../styles/global.css";
+import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
+import ImageRender from "../../../components/ImageRender.astro";
+import ArtProduct from "../../../components/ArtProduct.astro";
+import { length } from "astro:schema";
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const PRODUCT_QUERY = `*[_type == "category" && slug.current==$cat][0] {
+  _id,
+  title,
+  slug,
+  image,
+  "products": *[_type == "product" && references(^._id) && defined(slug.current)]
+  |order(publishedAt asc){
+    _id, 
+    IndividualProductName,
+    slug,
+    MainImage,
+    Category-> {
+        title,
+        slug
+    },
+    Size[]->{
+        title,
+        slug
+    },
+    Theme->{
+        title,
+        slug
+    },
+    Occasion[]->{
+        title,
+        slug
+    },
+    Description,
+    publishedAt
+    }
+}`;
+
+const categoryItems = await sanityClient.fetch<SanityDocument>(
+  PRODUCT_QUERY,
+  Astro.params,
+);
+
+type paths = Promise<{ params: { cat: string } }[]>;
+
+export async function getStaticPaths(): paths {
+  const SLUGS_QUERY = `*[_type == "category" && defined(slug.current)]{
+    "params": {"cat": slug.current}
+    }`;
+  return await sanityClient.fetch(SLUGS_QUERY);
+}
+---
+
+<MainLayout>
+  <div>
+    {
+      categoryItems.image && (
+        <ImageRender
+          image={categoryItems.image}
+          width={1500}
+          style="aspect-rectangle w-full object-cover h-64"
+        />
+      )
+    }
+    <h1 class="p-8 font-bold text-center text-xl">{categoryItems.title}</h1>
+    <div class="p-8 flex flex-wrap gap-3 justify-center items-center">
+      {
+        categoryItems.products.length > 0 ? (
+          categoryItems.products.map((item: any) => (
+            <div class="w-60">
+              <ArtProduct
+                image={item.MainImage}
+                name={item.IndividualProductName}
+                slug={item.slug}
+                theme={item.Theme.title}
+                type={item.Category.title}
+                size={item.Size[0].title}
+              />
+            </div>
+          ))
+        ) : (
+          <div class="center">
+            <span class="text-center">
+              There are currently no {categoryItems.title} products
+            </span>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</MainLayout>

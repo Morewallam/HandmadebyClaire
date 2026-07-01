@@ -1,0 +1,11 @@
+---
+interface Props {
+  padding?: string;
+}
+
+const { padding = "first:pl-8 last:pr-8" } = Astro.props;
+---
+
+<div class=`shrink-0 snap-center ${padding}`>
+  <slot />
+</div>

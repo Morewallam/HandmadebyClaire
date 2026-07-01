@@ -1,0 +1,55 @@
+---
+import type { SanityImageSource } from "@sanity/image-url";
+import ImageRender from "./ImageRender.astro";
+
+export interface Props {
+  image: SanityImageSource;
+  name: string;
+  slug: { current: string };
+  type: "theme" | "category" | "occasion";
+  size?: "small" | "large";
+}
+
+const { image, name, slug, type = "theme", size = "small" } = Astro.props;
+---
+
+{
+  size === "small" && (
+    <a href={`/works/${type}/${slug.current}`} class="block">
+      <div class="w-30 grid place-items-center shadow-md/20 bg-white p-3 group transition-transform duration-300 hover:scale-110">
+        <div class="w-20 h-20 drop-shadow-md/30">
+          <ImageRender
+            image={image}
+            height={100}
+            style="w-full h-full object-contain rounded-md"
+          />
+        </div>
+        <div class="flex items-center text-center h-10">
+          <span class="align-middle">{name}</span>
+        </div>
+      </div>
+    </a>
+  )
+}
+
+{
+  size === "large" && (
+    <a href={`/works/${type}/${slug.current}`} class="block">
+      <div class="p-4 shadow-xs bg-stone-100 group transition-transform duration-300 hover:scale-110">
+        <ImageRender
+          image={image}
+          width={700}
+          style="aspect-rectangle drop-shadow object-cover h-40 w-40 group-hover:opacity-95 object-center"
+        />
+        <div class="mt-4">
+          <div>
+            <h3 class="text-md text-gray-700">
+              <span aria-hidden="true" class="inset-0" />
+              {name}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </a>
+  )
+}

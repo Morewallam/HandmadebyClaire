@@ -1,0 +1,136 @@
+---
+import type { SanityImageSource } from "@sanity/image-url";
+import ImageRender from "./ImageRender.astro";
+import type { PortableTextBlock } from "@portabletext/react";
+import HorizontalScroll from "./HorizontalScroll.astro";
+import ScrollCard from "./ScrollCard.astro";
+import ThemeCard from "./ThemeCard.astro";
+import Description from "./Description.astro";
+
+export interface Props {
+  storeName: string;
+  slug?: { current: string };
+  storeImage: SanityImageSource;
+  description: PortableTextBlock;
+  products: {
+    image: SanityImageSource;
+    title: string;
+    slug: { current: string };
+  }[];
+  address?: string;
+  url?: string;
+}
+
+const { storeName, slug, storeImage, description, products, address, url } =
+  Astro.props;
+---
+
+<div
+  class="bg-white shadow-md overflow-hidden border border-gray-100 my-6 max-w-2xs sm:max-w-md md:max-w-xl"
+>
+  <!-- Top: Image left, info right -->
+  <div class="h-120">
+    <!-- Image -->
+    <div class="">
+      <ImageRender
+        image={storeImage}
+        height={500}
+        style="w-full h-48 object-cover "
+      />
+    </div>
+
+    <!-- Info -->
+    <div class="flex flex-col justify-center gap-3 p-6 flex-1">
+      <h2 class="font-tempus text-3xl text-gray-800 tracking-wide">
+        {storeName}
+      </h2>
+
+      <div class="flex flex-col gap-1 text-sm text-gray-500">
+        {
+          address && (
+            <span class="flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M12 2C8.686 2 6 4.686 6 8c0 4.5 6 12 6 12s6-7.5 6-12c0-3.314-2.686-6-6-6z"
+                />
+                <circle cx="12" cy="8" r="2" stroke-width="1.5" />
+              </svg>
+              {address}
+            </span>
+          )
+        }
+        {
+          url && (
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-green-700 hover:text-green-900 hover:underline transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M10.172 13.828a4 4 0 010-5.656l3-3a4 4 0 015.656 5.656l-1.5 1.5"
+                />
+              </svg>
+              {url}
+            </a>
+          )
+        }
+      </div>
+
+      <div
+        class="text-gray-600 text-sm leading-relaxed prose prose-sm max-w-none"
+      >
+        <Description description={description} />
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="mx-6 h-px bg-gray-100"></div>
+
+  <!-- Bottom: Products scroll -->
+  <div class="w-full min-w-0">
+    <p class="text-xs uppercase tracking-widest text-gray-400 px-6 pt-4">
+      Available Products
+    </p>
+    <HorizontalScroll padding="pt-3 pb-6" margin="px-6">
+      {
+        products.map((prod) => (
+          <ScrollCard>
+            <ThemeCard
+              image={prod.image}
+              name={prod.title}
+              slug={prod.slug}
+              type="category"
+            />
+          </ScrollCard>
+        ))
+      }
+    </HorizontalScroll>
+  </div>
+</div>

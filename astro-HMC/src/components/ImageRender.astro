@@ -1,0 +1,28 @@
+---
+import "../styles/global.css";
+import { urlFor } from "../helper/imageUrlHelper";
+import { type SanityImageSource } from "@sanity/image-url";
+import { length } from "astro:schema";
+
+export interface Props {
+  image: SanityImageSource;
+  width?: number;
+  height?: number;
+  style?: string;
+  alt?: string;
+}
+
+const { image, width, height, style, alt } = Astro.props;
+
+let imgUrl = urlFor(image);
+
+if (width) {
+  imgUrl = imgUrl.width(width);
+}
+
+if (height) {
+  imgUrl = imgUrl.height(height);
+}
+---
+
+<img src={imgUrl.url()} alt={alt} class={style} />
