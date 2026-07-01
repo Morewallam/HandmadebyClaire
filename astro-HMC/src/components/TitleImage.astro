@@ -1,0 +1,31 @@
+---
+import ImageRender from "./ImageRender.astro";
+
+export interface Props {
+  title: string;
+  image: SanityImageSource;
+}
+
+const { title, image } = Astro.props;
+---
+
+<div class="relative">
+  {
+    image && (
+      <ImageRender
+        image={image}
+        width={1300}
+        style="aspect-rectangle w-full object-cover h-64"
+      />
+    )
+  }
+  <div class="absolute inset-0 flex items-center justify-center">
+    <div
+      class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0)_35%)]"
+    >
+    </div>
+    <h1 class="relative text-black font-bold text-4xl">
+      {title}
+    </h1>
+  </div>
+</div>

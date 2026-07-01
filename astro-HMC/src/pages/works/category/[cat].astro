@@ -6,6 +6,7 @@ import ImageRender from "../../../components/ImageRender.astro";
 import ArtProduct from "../../../components/ArtProduct.astro";
 import { length } from "astro:schema";
 import MainLayout from "../../../layouts/MainLayout.astro";
+import TitleImage from "../../../components/titleImage.astro";
 
 const PRODUCT_QUERY = `*[_type == "category" && slug.current==$cat][0] {
   _id,
@@ -56,27 +57,7 @@ export async function getStaticPaths(): paths {
 
 <MainLayout>
   <div>
-    <div class="relative">
-      {
-        categoryItems.image && (
-          <ImageRender
-            image={categoryItems.image}
-            width={1500}
-            style="aspect-rectangle w-full object-cover h-64"
-          />
-        )
-      }
-
-      <div class="absolute inset-0 flex items-center justify-center">
-        <div
-          class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0)_35%)]"
-        >
-        </div>
-        <h1 class="relative text-black font-bold text-4xl">
-          {categoryItems.title}
-        </h1>
-      </div>
-    </div>
+    <TitleImage image={categoryItems.image} title={categoryItems.title} />
 
     <div class="p-8 flex flex-wrap gap-3 justify-center items-center">
       {

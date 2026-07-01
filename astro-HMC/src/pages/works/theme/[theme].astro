@@ -6,6 +6,7 @@ import ImageRender from "../../../components/ImageRender.astro";
 import ArtProduct from "../../../components/ArtProduct.astro";
 import { length } from "astro:schema";
 import MainLayout from "../../../layouts/MainLayout.astro";
+import TitleImage from "../../../components/titleImage.astro";
 
 const PRODUCT_QUERY = `*[_type == "theme" && slug.current==$theme][0] {
   _id,
@@ -59,27 +60,7 @@ m.length;
 
 <MainLayout>
   <div>
-    <div class="relative">
-      {
-        themeItems.image && (
-          <ImageRender
-            image={themeItems.image}
-            width={1300}
-            style="aspect-rectangle w-full object-cover h-64"
-          />
-        )
-      }
-      <!-- <div class="absolute inset-0 bg-white/30"></div> -->
-      <div class="absolute inset-0 flex items-center justify-center">
-        <div
-          class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0)_35%)]"
-        >
-        </div>
-        <h1 class="relative text-black font-bold text-4xl">
-          {themeItems.title}
-        </h1>
-      </div>
-    </div>
+    <TitleImage image={themeItems.image} title={themeItems.title} />
 
     <div class="p-8 flex flex-wrap gap-3 justify-center items-center">
       {

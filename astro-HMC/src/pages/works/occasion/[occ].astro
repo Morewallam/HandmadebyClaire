@@ -5,6 +5,7 @@ import { sanityClient } from "sanity:client";
 import ImageRender from "../../../components/ImageRender.astro";
 import ArtProduct from "../../../components/ArtProduct.astro";
 import MainLayout from "../../../layouts/MainLayout.astro";
+import TitleImage from "../../../components/titleImage.astro";
 
 const PRODUCT_QUERY = `*[_type == "occasion" && slug.current==$occ][0] {
   _id,
@@ -55,16 +56,7 @@ export async function getStaticPaths(): paths {
 
 <MainLayout>
   <div>
-    {
-      categoryItems.image && (
-        <ImageRender
-          image={categoryItems.image}
-          width={1500}
-          style="aspect-rectangle w-full object-cover h-64"
-        />
-      )
-    }
-    <h1 class="p-8 font-bold text-center text-xl">{categoryItems.title}</h1>
+    <TitleImage image={categoryItems.image} title={categoryItems.title} />
     <div class="p-8 flex flex-wrap gap-3 justify-center items-center">
       {
         categoryItems.products.length > 0 ? (
