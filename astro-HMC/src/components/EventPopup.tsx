@@ -42,7 +42,7 @@ export default function EventPopup({ event, onClose }: EventProps) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 overflow-hidden"
+        className="bg-white rounded-md shadow-xl max-w-md w-full mx-4 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {image && (
@@ -62,7 +62,7 @@ export default function EventPopup({ event, onClose }: EventProps) {
 
           {event.start && (
             <div className="flex items-center gap-2 text-gray-600 text-sm">
-              <span>📅</span>
+              {/* <span>📅</span> */}
               <div>
                 <div>{formatDate(event.start)}</div>
                 {event.end && (
@@ -74,14 +74,14 @@ export default function EventPopup({ event, onClose }: EventProps) {
 
           {address && (
             <div className="flex items-center gap-2 text-gray-600 text-sm">
-              <span>📍</span>
+              {/* <span>📍</span> */}
               <span>{address}</span>
             </div>
           )}
 
           {url && (
             <div className="flex items-center gap-2 text-gray-600 text-sm">
-              <span>🔗</span>
+              {/* <span>🔗</span> */}
               <a href={url}>{url}</a>
             </div>
           )}

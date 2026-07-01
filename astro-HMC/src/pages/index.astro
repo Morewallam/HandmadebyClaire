@@ -17,6 +17,7 @@ import { Vimeo } from "@astro-community/astro-embed-vimeo";
 import StoreCard from "../components/StoreCard.astro";
 import { Image } from "astro:assets";
 import { studioPath } from "@sanity/client/csm";
+import EventPopup from "../components/EventPopup";
 
 const FRONT_PAGE_QUERY = `*[
   _type == "frontpage"][1]{
@@ -89,6 +90,8 @@ const calendarEvents = events.flatMap((event: any) =>
     },
   })),
 );
+
+const futureEvents = [];
 
 // console.log(front_page_info);
 const videoId: string = front_page_info.video_URL?.split("/").pop() || " ";
@@ -257,8 +260,14 @@ const stores = await sanityClient.fetch<
         <div class="mx-auto mt-2 mb-5 w-60 h-[2px] bg-taupe-700 rounded-full">
         </div>
       </h2>
-      <div class="bg-white/80 w-full rounded-lg max-w-[80vw]">
-        <Calendar events={calendarEvents} client:visible />
+      <div class="flex flex-wrap">
+        <div class="bg-white/80 w-full rounded-lg max-w-[80vw]">
+          <Calendar events={calendarEvents} client:visible />
+        </div>
+        <div>
+          <h1>Upcoming Events</h1>
+          {futureEvents.map((e) => <EventPopup event={e} onClose={() => {}} />)}
+        </div>
       </div>
     </div>
     <!-- . #abcedb -->
