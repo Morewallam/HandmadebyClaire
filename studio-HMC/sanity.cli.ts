@@ -1,6 +1,4 @@
 import {defineCliConfig} from 'sanity/cli'
-import {structureTool} from 'sanity/structure'
-import frontPage from "./schemaTypes/frontPage"
 
 export default defineCliConfig({
   api: {
