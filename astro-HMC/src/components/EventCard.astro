@@ -1,50 +1,75 @@
 ---
+import type { SanityImageSource } from "@sanity/image-url";
 import ImageRender from "./ImageRender.astro";
-
-const { image, name, theme, type, size, slug } = Astro.props;
+import type { PortableTextBlock } from "sanity";
+import Description from "./Description.astro";
+import { locales, parse } from "astro:schema";
 
 export interface Props {
+  eventToDisplay: eventType;
+}
+
+export interface eventType {
   title: string;
-  eventImage: SanityImageSource;
+  image: SanityImageSource;
   description: PortableTextBlock;
-  schedule: {
-    startTime: string;
-    endTime: string;
-    date: string;
-  }[];
+  startTime: string;
+  endTime: string;
+  date: string;
   address?: string;
   url?: string;
 }
 
-const { title, eventImage, description, schedule, address, url } = Astro.props;
+const {
+  eventToDisplay: {
+    title,
+    image,
+    description,
+    startTime,
+    endTime,
+    date,
+    address,
+    url,
+  },
+} = Astro.props;
+
+function formatDate(date: string) {
+  const parsedDate = new Date(date);
+
+  return parsedDate.toDateString();
+}
+function formatTime(time: string) {
+  const date = new Date();
+  const split = time.split(":");
+  date.setHours(parseInt(split[0]));
+  date.setMinutes(parseInt(split[1]));
+
+  return date.toLocaleTimeString("en-US", { timeStyle: "short" });
+}
 ---
 
-<div class="bg-white rounded-md shadow-xl max-w-md w-full mx-4 overflow-hidden">
+<div
+  class="bg-white shadow-xl max-w-2xs md:max-w-sm w-full mx-4 overflow-hidden"
+>
   {
-    eventImage && (
-      <ImageRender
-        image={eventImage}
-        alt={title}
-        class:list="w-full h-48 object-cover"
-      />
+    image && (
+      <ImageRender image={image} alt={title} style="w-full h-48 object-cover" />
     )
   }
 
-  <div class="p-6 space-y-4">
+  <div class="p-6">
     <div class="flex items-start justify-between">
       <h2 class="text-xl font-bold text-gray-900">{title}</h2>
     </div>
 
     {
-      schedule[0].startTime && (
+      startTime && (
         <div class="flex items-center gap-2 text-gray-600 text-sm">
-          {/* <span>📅</span> */}
           <div>
-            <div>{formatDate(schedule[0].startTime)}</div>
-            {schedule[0].endTime && (
+            <div>{formatDate(date)}</div>
+            {endTime && (
               <div>
-                {formatTime(schedule[0].startTime)} –{" "}
-                {formatTime(schedule[0].endTime)}
+                {formatTime(startTime)} – {formatTime(endTime)}
               </div>
             )}
           </div>
@@ -55,7 +80,6 @@ const { title, eventImage, description, schedule, address, url } = Astro.props;
     {
       address && (
         <div class="flex items-center gap-2 text-gray-600 text-sm">
-          {/* <span>📍</span> */}
           <span>{address}</span>
         </div>
       )
@@ -64,16 +88,15 @@ const { title, eventImage, description, schedule, address, url } = Astro.props;
     {
       url && (
         <div class="flex items-center gap-2 text-gray-600 text-sm">
-          {/* <span>🔗</span> */}
           <a href={url}>{url}</a>
         </div>
       )
     }
 
     {
-      description && description.length > 0 && (
+      description && (
         <div class="text-gray-700 text-sm leading-relaxed border-t pt-4 prose prose-sm max-w-none">
-          <description description={description} />
+          <Description description={description} />
         </div>
       )
     }

@@ -1,0 +1,28 @@
+---
+import Description from "../components/Description.astro";
+import ImageRender from "../components/ImageRender.astro";
+---
+
+<div id="Studio Info" . class="bg-stone-100 p-8">
+  <h2
+    class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
+  >
+    Studio
+    <!-- <div
+          class="mx-auto mt-2 mb-5 w-50 md:w-xl h-[2px] bg-taupe-700 rounded-full"
+        >
+        </div> -->
+  </h2>
+  <div class="flex flex-col md:flex-row">
+    <div>
+      <ImageRender
+        image={studio_image}
+        width={500}
+        style="w-full object-cover md:h-full "
+      />
+    </div>
+    <div class="text-lg p-5">
+      <Description description={studio_description} />
+    </div>
+  </div>
+</div>

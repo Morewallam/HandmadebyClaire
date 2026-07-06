@@ -1,0 +1,60 @@
+---
+import EventCard, { type eventType } from "./EventCard.astro";
+import HorizontalScroll from "./HorizontalScroll.astro";
+import ScrollCard from "./ScrollCard.astro";
+
+export interface Props {
+  events: eventType[];
+  limit?: number;
+}
+
+const { events, limit = 3 } = Astro.props;
+---
+
+<event-manager data-events={JSON.stringify(events)} data-limit={limit}>
+  <HorizontalScroll padding="" gap="gap-4">
+    {
+      events.map((evt, i: number) => (
+        <div
+          id={"eventcard" + String(i)}
+          class="oldcard shrink-0 snap-center first:pl-8 last:pr-8"
+        >
+          <EventCard eventToDisplay={evt} />
+        </div>
+      ))
+    }
+  </HorizontalScroll>
+</event-manager>
+
+<style>
+  .oldcard {
+    display: none;
+  }
+</style>
+
+<script>
+  import type { eventType } from "./EventCard.astro";
+
+  class EventManger extends HTMLElement {
+    connectedCallback() {
+      const events: eventType[] = JSON.parse(this.dataset.events ?? "[]");
+
+      let limit = Number(this.dataset.limit ?? 3);
+
+      const date = new Date();
+
+      events.map((evt, i) => {
+        let eventelm = document.getElementById("eventcard" + String(i));
+        const evtDate = new Date(evt.date);
+        console.log(evtDate.toLocaleDateString());
+        if (evtDate.valueOf() - date.valueOf() > 0 && limit > 0) {
+          //Display
+          eventelm?.classList.remove("oldcard");
+          limit = limit - 1;
+        }
+      });
+    }
+  }
+
+  customElements.define("event-manager", EventManger);
+</script>

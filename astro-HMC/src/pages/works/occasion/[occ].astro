@@ -5,7 +5,7 @@ import { sanityClient } from "sanity:client";
 import ImageRender from "../../../components/ImageRender.astro";
 import ArtProduct from "../../../components/ArtProduct.astro";
 import MainLayout from "../../../layouts/MainLayout.astro";
-import TitleImage from "../../../components/titleImage.astro";
+import TitleImage from "../../../components/TitleImage.astro";
 
 const PRODUCT_QUERY = `*[_type == "occasion" && slug.current==$occ][0] {
   _id,

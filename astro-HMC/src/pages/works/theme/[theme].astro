@@ -6,7 +6,7 @@ import ImageRender from "../../../components/ImageRender.astro";
 import ArtProduct from "../../../components/ArtProduct.astro";
 import { length } from "astro:schema";
 import MainLayout from "../../../layouts/MainLayout.astro";
-import TitleImage from "../../../components/titleImage.astro";
+import TitleImage from "../../../components/TitleImage.astro";
 
 const PRODUCT_QUERY = `*[_type == "theme" && slug.current==$theme][0] {
   _id,

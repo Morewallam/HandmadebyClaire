@@ -29,15 +29,73 @@ import { Font } from "astro:assets";
       >
         Handmade By Claire
       </a>
-      <nav class="flex gap-6 text-sm tracking-widest uppercase text-white">
+
+      <!-- Desktop nav -->
+      <nav
+        class="hidden md:flex gap-6 text-sm tracking-widest uppercase text-white"
+      >
         <a href="/" class="hover:text-white transition-colors">Home</a>
         <a href="/works" class="hover:text-white transition-colors">Browse</a>
-        <a href="#Contact" class="hover:text-white transition-colors"
-          >Contact Me</a
+        <a href="#Contact" class="hover:text-white transition-colors">Contact</a
         >
       </nav>
+
+      <!-- Mobile hamburger button -->
+      <button
+        id="menu-toggle"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        class="md:hidden text-white p-2 -mr-2"
+      >
+        <svg
+          id="icon-open"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg
+          id="icon-close"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-6 h-6 hidden"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
     </header>
+
+    <!-- Mobile dropdown panel -->
+    <div
+      id="mobile-menu"
+      class="hidden md:hidden fixed top-15 left-0 right-0 z-40 bg-green-900/95 backdrop-blur-sm border-b border-green-800 flex flex-col text-white text-sm tracking-widest uppercase"
+    >
+      <a href="/" class="px-10 py-4 hover:bg-green-800 transition-colors"
+        >Home</a
+      >
+      <a href="/works" class="px-10 py-4 hover:bg-green-800 transition-colors"
+        >Browse</a
+      >
+      <a href="#Contact" class="px-10 py-4 hover:bg-green-800 transition-colors"
+        >Contact</a
+      >
+    </div>
+
     <slot />
+
     <footer class="w-full bg-taupe-800 text-taupe-100 pt-12 pb-6 px-10">
       <div
         class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 pb-10 border-b border-taupe-600"
@@ -62,8 +120,11 @@ import { Font } from "astro:assets";
           <a href="/works" class="text-sm hover:text-white transition-colors"
             >Browse Works</a
           >
-          <a href="/#Shops" class="text-sm hover:text-white transition-colors"
-            >Find Us</a
+          <a href="/#Events" class="text-sm hover:text-white transition-colors"
+            >Events</a
+          >
+          <a href="/#Stores" class="text-sm hover:text-white transition-colors"
+            >Stores</a
           >
         </div>
 
@@ -78,48 +139,12 @@ import { Font } from "astro:assets";
             href="mailto:handmadebyclairestationary@gmail.com"
             class="text-sm hover:text-white transition-colors"
           >
-            <!-- <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              class="w-5 h-5"
-              stroke="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier">
-                <path
-                  d="M4 18L9 12M20 18L15 12M3 8L10.225 12.8166C10.8665 13.2443 11.1872 13.4582 11.5339 13.5412C11.8403 13.6147 12.1597 13.6147 12.4661 13.5412C12.8128 13.4582 13.1335 13.2443 13.775 12.8166L21 8M6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V8.2C21 7.0799 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.07989 19 6.2 19Z"
-                  stroke="currentColor"
-                  stroke-width="1.464"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"></path>
-              </g></svg
-            > -->
             handmadebyclairestationary@gmail.com
           </a>
           <a
             href="tel:+16042228507"
             class="text-sm hover:text-white transition-colors"
           >
-            <!-- <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              class="w-5 h-5"
-              stroke="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier">
-                <path
-                  d="M4 18L9 12M20 18L15 12M3 8L10.225 12.8166C10.8665 13.2443 11.1872 13.4582 11.5339 13.5412C11.8403 13.6147 12.1597 13.6147 12.4661 13.5412C12.8128 13.4582 13.1335 13.2443 13.775 12.8166L21 8M6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V8.2C21 7.0799 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.07989 19 6.2 19Z"
-                  stroke="currentColor"
-                  stroke-width="1.464"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"></path>
-              </g></svg
-            > -->
             604&#8209;222&#8209;8507
           </a>
           <div class="flex gap-4 mt-2">
@@ -157,22 +182,26 @@ import { Font } from "astro:assets";
               rel="noopener noreferrer"
               class="text-taupe-300 hover:text-white transition-colors"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M20 1C21.6569 1 23 2.34315 23 4V20C23 21.6569 21.6569 23 20 23H4C2.34315 23 1 21.6569 1 20V4C1 2.34315 2.34315 1 4 1H20ZM20 3C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H15V13.9999H17.0762C17.5066 13.9999 17.8887 13.7245 18.0249 13.3161L18.4679 11.9871C18.6298 11.5014 18.2683 10.9999 17.7564 10.9999H15V8.99992C15 8.49992 15.5 7.99992 16 7.99992H18C18.5523 7.99992 19 7.5522 19 6.99992V6.31393C19 5.99091 18.7937 5.7013 18.4813 5.61887C17.1705 5.27295 16 5.27295 16 5.27295C13.5 5.27295 12 6.99992 12 8.49992V10.9999H10C9.44772 10.9999 9 11.4476 9 11.9999V12.9999C9 13.5522 9.44771 13.9999 10 13.9999H12V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H20Z"
-                  fill="currentColor"></path>
-              </svg>
+              <div class="flex gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M20 1C21.6569 1 23 2.34315 23 4V20C23 21.6569 21.6569 23 20 23H4C2.34315 23 1 21.6569 1 20V4C1 2.34315 2.34315 1 4 1H20ZM20 3C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H15V13.9999H17.0762C17.5066 13.9999 17.8887 13.7245 18.0249 13.3161L18.4679 11.9871C18.6298 11.5014 18.2683 10.9999 17.7564 10.9999H15V8.99992C15 8.49992 15.5 7.99992 16 7.99992H18C18.5523 7.99992 19 7.5522 19 6.99992V6.31393C19 5.99091 18.7937 5.7013 18.4813 5.61887C17.1705 5.27295 16 5.27295 16 5.27295C13.5 5.27295 12 6.99992 12 8.49992V10.9999H10C9.44772 10.9999 9 11.4476 9 11.9999V12.9999C9 13.5522 9.44771 13.9999 10 13.9999H12V21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3H20Z"
+                    fill="currentColor"></path>
+                </svg>
+                Handmade by Claire
+              </div>
+            </a>
 
-              <!-- Pinterest -->
-              <!-- <a
+            <!-- Pinterest -->
+            <!-- <a
                 href="https://pinterest.com"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -189,7 +218,6 @@ import { Font } from "astro:assets";
                   ></path>
                 </svg>
               </a> -->
-            </a>
           </div>
         </div>
 
@@ -197,14 +225,40 @@ import { Font } from "astro:assets";
         <div
           class="max-w-5xl mx-auto pt-6 text-center text-xs text-taupe-400 tracking-wide"
         >
-          © {new Date().getFullYear()} Hand Made By Claire. All rights reserved.
+          © {new Date().getFullYear()} Handmade By Claire. All rights reserved.
         </div>
         <div class="pt-6 text-center text-xs text-taupe-400 tracking-wide">
-          Website designed and developed by Sean Wallace. Contact me at <a
-            href="mailto:swallace987@gmail.com"><u>swallace987@gmail.com</u></a
+          Website designed and developed by Sean Wallace. <a
+            href="mailto:swallace987@gmail.com"><u>Contact me</u></a
           >
         </div>
       </div>
     </footer>
+
+    <script>
+      const toggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("mobile-menu");
+      const iconOpen = document.getElementById("icon-open");
+      const iconClose = document.getElementById("icon-close");
+
+      toggle?.addEventListener("click", () => {
+        const isOpen = menu?.classList.contains("hidden") === false;
+
+        menu?.classList.toggle("hidden");
+        iconOpen?.classList.toggle("hidden");
+        iconClose?.classList.toggle("hidden");
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+      });
+
+      // Close menu when a link inside it is clicked
+      menu?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.add("hidden");
+          iconOpen?.classList.remove("hidden");
+          iconClose?.classList.add("hidden");
+          toggle?.setAttribute("aria-expanded", "false");
+        });
+      });
+    </script>
   </body>
 </html>

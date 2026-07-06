@@ -114,10 +114,18 @@ const { storeName, slug, storeImage, description, products, address, url } =
   <div class="mx-6 h-px bg-gray-100"></div>
 
   <!-- Bottom: Products scroll -->
-  <div class="w-full min-w-0">
+  <div class="w-full min-w-0 relative">
     <p class="text-xs uppercase tracking-widest text-gray-400 px-6 pt-4">
       Available Products
     </p>
+    <div
+      class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"
+    >
+    </div>
+    <div
+      class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"
+    >
+    </div>
     <HorizontalScroll padding="pt-3 pb-6" margin="px-6">
       {
         products.map((prod) => (

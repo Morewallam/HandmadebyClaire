@@ -53,7 +53,7 @@ export default function Calendar({ events }: Props) {
           right: 'next',
         }}
         eventContent={(eventInfo) => (
-          <div className="text-m p-1 truncate text-wrap cursor-pointer transition-transform duration-300 hover:scale-105">
+          <div className="text-[0.6rem]  md:text-xs  p-1 text-wrap cursor-pointer transition-transform duration-300 hover:scale-105">
             {eventInfo.event.title}
           </div>
         )}
