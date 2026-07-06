@@ -53,8 +53,6 @@ const front_page_info = await sanityClient.fetch<{
     Theme: { title: string };
   }[];
   video_URL: string;
-  studio_image: SanityImageSource;
-  studio_description: PortableTextBlock;
 }>(FRONT_PAGE_QUERY);
 
 const events = await sanityClient.fetch(`
@@ -211,14 +209,21 @@ const stores = await sanityClient.fetch<
       </div>
     </div>
 
-    <div id="Hero" class="relative h-[200vh]">
+    <div id="quote" class="relative h-[200vh]">
       <div class="sticky top-0 h-[100vh] overflow-hidden">
+        <!-- Placeholder shown until video loads -->
+        <div
+          id="video-placeholder"
+          class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+          style={`background-image: url(${urlFor(front_page_info.main_image).width(1600).url()})`}
+        >
+        </div>
         <!-- Video background -->
         <iframe
+          id="quote-video"
           src={`https://player.vimeo.com/video/${videoId}?background=1&autoplay=1&loop=1&muted=1&autopause=0`}
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-1000 ease-in-out"
           style="min-width: 177.77vh; min-height: 56.25vw; width: 100%; height: 100%;"
-          frameborder="0"
           allow="autoplay; fullscreen; picture-in-picture"></iframe>
 
         <div class="absolute inset-0 bg-black/50"></div>
@@ -281,7 +286,7 @@ const stores = await sanityClient.fetch<
         <Calendar events={calendarEvents} client:visible />
       </div>
     </div>
-    <!-- . #abcedb -->
+
     <div id="Stores" class="min-w-0 bg-[#b6d1db] pt-8">
       <h2
         class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
@@ -315,7 +320,7 @@ const stores = await sanityClient.fetch<
 </MainLayout>
 
 <script>
-  const hero = document.getElementById("Hero");
+  const hero = document.getElementById("quote");
   const fadeOut = document.querySelector(".scroll-fade-out") as HTMLElement;
   const fadeIn = document.querySelector(".scroll-fade-in") as HTMLElement;
 
@@ -335,5 +340,16 @@ const stores = await sanityClient.fetch<
     const inProgress = Math.max(0, Math.min((progress - 0.2) / 0.15, 1));
     fadeIn.style.opacity = String(inProgress);
     fadeIn.style.transform = `translateY(${40 * (1 - inProgress)}px)`;
+  });
+
+  const video = document.getElementById("quote-video") as HTMLIFrameElement;
+  const placeholder = document.getElementById("video-placeholder");
+
+  import Player from "@vimeo/player";
+
+  const player = new Player(video);
+  player.on("play", () => {
+    video.style.setProperty("opacity", "1");
+    placeholder?.style.setProperty("opacity", "0");
   });
 </script>

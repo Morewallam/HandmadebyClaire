@@ -46,9 +46,8 @@ const { events, limit = 3 } = Astro.props;
       events.map((evt, i) => {
         let eventelm = document.getElementById("eventcard" + String(i));
         const evtDate = new Date(evt.date);
-        console.log(evtDate.toLocaleDateString());
+
         if (evtDate.valueOf() - date.valueOf() > 0 && limit > 0) {
-          //Display
           eventelm?.classList.remove("oldcard");
           limit = limit - 1;
         }

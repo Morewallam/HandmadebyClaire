@@ -30,7 +30,20 @@ export const aboutPage = defineType({
         type:'array',
         of:[{type:"block"}],
         validation: (rule) => rule.required(),
-    })
+    }),
+    defineField({
+        name:'event_history_description',
+        title:'Event History Description',
+        type:'array',
+        of:[{type:"block"}],
+        validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'event_images',
+      title: 'Event Images',
+      type: 'array',
+      of: [{type:'image'}]
+    }),
 
   ],
   preview: {

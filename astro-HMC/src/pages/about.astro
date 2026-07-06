@@ -1,28 +1,124 @@
 ---
+import { sanityClient } from "sanity:client";
 import Description from "../components/Description.astro";
 import ImageRender from "../components/ImageRender.astro";
+import type { PortableTextBlock } from "sanity";
+import type { SanityImageSource } from "@sanity/image-url";
+import MainLayout from "../layouts/MainLayout.astro";
+
+const ABOUT_PAGE_QUERY = `*[
+  _type == "aboutpage"][0]{
+    _id, 
+    about_image,
+    about_me_description,
+    studio_image,
+    studio_description,
+    event_history_description,
+    event_images[]
+    }`;
+
+const about_page_info = await sanityClient.fetch<{
+  _id: string;
+  about_image: SanityImageSource;
+  about_me_description: PortableTextBlock;
+  studio_image: SanityImageSource;
+  studio_description: PortableTextBlock;
+  event_history_description: PortableTextBlock;
+  event_images: SanityImageSource[];
+}>(ABOUT_PAGE_QUERY);
 ---
 
-<div id="Studio Info" . class="bg-stone-100 p-8">
-  <h2
-    class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
-  >
-    Studio
-    <!-- <div
-          class="mx-auto mt-2 mb-5 w-50 md:w-xl h-[2px] bg-taupe-700 rounded-full"
+<MainLayout title="Handmade By Claire">
+  <div class="bg-olive-200">
+    <!-- About Me -->
+    <div
+      id="About"
+      class="w-full flex flex-col items-center pt-6 pb-14 px-6 md:px-0"
+    >
+      <h2
+        class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
+      >
+        About Me
+        <div class="mx-auto mt-2 mb-5 w-60 h-[2px] bg-taupe-700 rounded-full">
+        </div>
+      </h2>
+      <div
+        class="flex flex-col md:flex-row items-center gap-8 max-w-5xl w-full"
+      >
+        <div class="md:w-1/2">
+          <ImageRender
+            image={about_page_info.about_image}
+            width={800}
+            style="w-full h-full object-cover rounded-sm"
+          />
+        </div>
+        <div
+          class="md:w-1/2 text-lg text-taupe-800 [&_p]:leading-relaxed [&_p]:mb-4"
         >
-        </div> -->
-  </h2>
-  <div class="flex flex-col md:flex-row">
-    <div>
-      <ImageRender
-        image={studio_image}
-        width={500}
-        style="w-full object-cover md:h-full "
-      />
+          <Description description={about_page_info.about_me_description} />
+        </div>
+      </div>
     </div>
-    <div class="text-lg p-5">
-      <Description description={studio_description} />
+
+    <!-- Studio -->
+    <div id="Studio Info" class="bg-stone-100 p-8">
+      <h2
+        class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
+      >
+        Studio
+        <div class="mx-auto mt-2 mb-5 w-60 h-[2px] bg-taupe-700 rounded-full">
+        </div>
+      </h2>
+      <div
+        class="flex flex-col md:flex-row items-center max-w-5xl mx-auto gap-8 pb-6"
+      >
+        <div class="md:w-1/2">
+          <ImageRender
+            image={about_page_info.studio_image}
+            width={800}
+            style="w-full object-cover rounded-sm md:h-full"
+          />
+        </div>
+        <div
+          class="md:w-1/2 text-lg text-taupe-800 p-5 [&_p]:leading-relaxed [&_p]:mb-4"
+        >
+          <Description description={about_page_info.studio_description} />
+        </div>
+      </div>
+    </div>
+
+    <!-- Event History -->
+    <div
+      id="Event History"
+      class="w-full flex flex-col items-center pt-6 pb-14 px-6 md:px-0"
+    >
+      <h2
+        class="text-6xl pt-8 text-center w-full font-tempus tracking-wide text-taupe-700"
+      >
+        Event History
+        <div class="mx-auto mt-2 mb-5 w-60 h-[2px] bg-taupe-700 rounded-full">
+        </div>
+      </h2>
+
+      <div
+        class="max-w-5xl w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8"
+      >
+        {
+          about_page_info.event_images.map((img) => (
+            <ImageRender
+              image={img}
+              width={500}
+              style="w-full h-64 object-cover rounded-sm"
+            />
+          ))
+        }
+      </div>
+
+      <div
+        class="max-w-3xl w-full text-lg text-taupe-800 text-center [&_p]:leading-relaxed [&_p]:mb-4"
+      >
+        <Description description={about_page_info.event_history_description} />
+      </div>
     </div>
   </div>
-</div>
+</MainLayout>
