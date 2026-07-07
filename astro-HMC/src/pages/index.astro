@@ -193,7 +193,7 @@ const stores = await sanityClient.fetch<
           {
             front_page_info.highlights.map((prod) => (
               <ScrollCard>
-                <div class="w-60">
+                <div>
                   <ArtProduct
                     image={prod.MainImage}
                     name={prod.IndividualProductName}
@@ -269,7 +269,7 @@ const stores = await sanityClient.fetch<
       <div class="p-4">
         <h1 class="text-xl">Upcoming Events</h1>
         <div
-          class="max-w-[90vw] lg:max-w-xl relative border-solid pb-2 pt-2 border-gray-100 bg-white/80"
+          class="max-w-[90vw] lg:max-w-[50vw] relative border-solid pb-2 pt-2 border-gray-100 bg-white/80"
         >
           <div
             class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-taupe-100 to-transparent z-10 pointer-events-none"

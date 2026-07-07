@@ -2,11 +2,7 @@
 import "../../styles/global.css";
 import type { SanityDocument } from "@sanity/client";
 
-import type { SanityImageObject } from "@sanity/image-url";
 import { sanityClient } from "sanity:client";
-import ImageRender from "../../components/ImageRender.astro";
-import Description from "../../components/Description.astro";
-import ArtProduct from "../../components/ArtProduct.astro";
 import HorizontalScroll from "../../components/HorizontalScroll.astro";
 import ScrollCard from "../../components/ScrollCard.astro";
 import ThemeCard from "../../components/ThemeCard.astro";
@@ -19,11 +15,12 @@ const CATEGORY_QUERY = `*[
  title,
  slug,
  image,
+ order,
  "products": *[_type == "product" && references(^._id) && defined(slug.current)]{
  _id,
  slug
  }
-}[count(products) > 0] `;
+}[count(products) > 0] | order(order asc)`;
 
 const THEME_QUERY = `*[
  _type == "theme" && defined(slug.current)
@@ -32,101 +29,53 @@ const THEME_QUERY = `*[
  title,
  slug,
  image,
+ order,
  "products": *[_type == "product" && references(^._id) && defined(slug.current)]{
  _id,
  slug
  }
-}[count(products) > 0] `;
-
-const OCCASION_QUERY = `*[
- _type == "occasion" && defined(slug.current)
-]{
- _id,
- title,
- slug,
- image,
- "products": *[_type == "product" && references(^._id) && defined(slug.current)]{
- _id,
- slug
- }
-}[count(products) > 0] `;
-
-const PRODUCT_QUERY = `*[_type == "category" && defined(slug.current)] {
-  _id,
-  title,
-  slug,
-  image,
-  "products": *[_type == "product" && references(^._id) && defined(slug.current)]
-  {
-    _id, 
-    IndividualProductName,
-    slug,
-    MainImage,
-    Category,
-    Category-> {
-        title,
-        slug
-    },
-    Size[]->{
-        title,
-        slug
-    },
-    Theme->{
-        title,
-        slug
-    },
-    Occasion[]->{
-        title,
-        slug
-    },
-    Description,
-    publishedAt
-    }
-}[count(products) > 0]`;
-
-const products_by_theme =
-  await sanityClient.fetch<SanityDocument[]>(PRODUCT_QUERY);
+}[count(products) > 0] | order(order asc) `;
 
 const categories = await sanityClient.fetch<SanityDocument[]>(CATEGORY_QUERY);
 
 const themes = await sanityClient.fetch<SanityDocument[]>(THEME_QUERY);
-
-const occasions = await sanityClient.fetch<SanityDocument[]>(OCCASION_QUERY);
 ---
 
-<MainLayout>
+<MainLayout title="Browse">
   <div class="bg-olive-200">
     <div class="mx-auto pt-6 pb-6 sm:pt-8 sm:pb-8">
-      <!-- <h1
-        class="text-4xl font-bold tracking-tight text-gray-900 text-center pb-10 underline"
-      >
-        Browse
-      </h1> -->
-
       <h2 class="font-medium text-3xl text-center">Categories</h2>
+      <div class="relative">
+        <div
+          class="absolute left-0 top-0 bottom-0 w-4 lg:w-8 bg-gradient-to-r from-olive-200 to-transparent z-10 pointer-events-none"
+        >
+        </div>
+        <div
+          class="absolute right-0 top-0 bottom-0 w-4 lg:w-8 bg-gradient-to-l from-olive-200 to-transparent z-10 pointer-events-none"
+        >
+        </div>
+        <HorizontalScroll>
+          {
+            categories.map((cat) => (
+              <ScrollCard>
+                <ThemeCard
+                  image={cat.image}
+                  slug={cat.slug}
+                  name={cat.title}
+                  type="category"
+                  size="large"
+                />
+              </ScrollCard>
+            ))
+          }
+        </HorizontalScroll>
+      </div>
+      <div>
+        <h2 class="pb-8 font-medium text-3xl text-center">Themes</h2>
 
-      <HorizontalScroll>
-        {
-          categories.map((cat) => (
-            <ScrollCard>
-              <ThemeCard
-                image={cat.image}
-                slug={cat.slug}
-                name={cat.title}
-                type="category"
-                size="large"
-              />
-            </ScrollCard>
-          ))
-        }
-      </HorizontalScroll>
-
-      <h2 class="pb-8 font-medium text-3xl text-center">Themes</h2>
-
-      <!-- <HorizontalScroll>
-        {
-          themes.map((cat) => (
-            <ScrollCard padding="">
+        <div class="flex flex-wrap justify-center gap-5">
+          {
+            themes.map((cat) => (
               <ThemeCard
                 image={cat.image}
                 slug={cat.slug}
@@ -134,65 +83,10 @@ const occasions = await sanityClient.fetch<SanityDocument[]>(OCCASION_QUERY);
                 type="theme"
                 size="large"
               />
-            </ScrollCard>
-          ))
-        }
-      </HorizontalScroll> -->
-
-      <div class="flex flex-wrap justify-center gap-5">
-        {
-          themes.map((cat) => (
-            <ThemeCard
-              image={cat.image}
-              slug={cat.slug}
-              name={cat.title}
-              type="theme"
-              size="large"
-            />
-          ))
-        }
+            ))
+          }
+        </div>
       </div>
-
-      <!-- <h2 class="pl-8 font-medium text-lg text-center">Occasions</h2>
-
-     <HorizontalScroll>
-      {
-        
-        occasions.map((occ) => (
-            occ.image &&
-          <ScrollCard padding="first:pl-[30vw] last:pr-[30vw]">
-            <ThemeCard image={occ.image} slug={occ.slug} name={occ.title} type="occasion"/>
-          </ScrollCard>
-        ))
-      }
-    </HorizontalScroll> -->
-
-      <!-- {
-    products_by_theme.map((theme)=>(
-        <h2 class="pl-8 text-lg font-medium text-center">{theme.title}</h2>
-        <HorizontalScroll>
-      {
-        theme.products.map((prod: any) => (
-                <ScrollCard padding="first:pl-[30vw] last:pr-[30vw]">
-                <div class="w-60">
-                    <ArtProduct
-                    image={prod.MainImage}
-                    name={prod.IndividualProductName}
-                    slug={prod.slug}
-                    theme={prod.Theme.title}
-                    type={prod.Category.title}
-                    size={prod.Size[0].title}
-                    />
-                </div>
-                </ScrollCard>
-                
-        ))
-        
-      }</HorizontalScroll>
-
-
-    ))
-    } -->
     </div>
   </div>
 </MainLayout>

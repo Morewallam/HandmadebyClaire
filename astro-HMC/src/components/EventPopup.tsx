@@ -1,14 +1,5 @@
-import React from 'react';
 import { PortableText } from '@portabletext/react';
 import type { PortableTextBlock } from '@portabletext/react';
-
-// interface PortableTextBlock {
-//   _key: string;
-//   _type: string;
-//   children: { _key: string; _type: string; text: string; marks: string[] }[];
-//   markDefs: any[];
-//   style: string;
-// }
 
 interface EventProps {
   event: {
@@ -62,7 +53,7 @@ export default function EventPopup({ event, onClose }: EventProps) {
 
           {event.start && (
             <div className="flex items-center gap-2 text-gray-600 text-sm">
-              {/* <span>📅</span> */}
+              
               <div>
                 <div>{formatDate(event.start)}</div>
                 {event.end && (
@@ -74,14 +65,14 @@ export default function EventPopup({ event, onClose }: EventProps) {
 
           {address && (
             <div className="flex items-center gap-2 text-gray-600 text-sm">
-              {/* <span>📍</span> */}
+             
               <span>{address}</span>
             </div>
           )}
 
           {url && (
             <div className="flex items-center gap-2 text-gray-600 text-sm">
-              {/* <span>🔗</span> */}
+             
               <a href={url}>{url}</a>
             </div>
           )}

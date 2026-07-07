@@ -1,4 +1,5 @@
 ---
+import type { SanityImageSource } from "@sanity/image-url";
 import ImageRender from "./ImageRender.astro";
 
 export interface Props {
@@ -21,7 +22,7 @@ const { title, image } = Astro.props;
   }
   <div class="absolute inset-0 flex items-center justify-center">
     <div
-      class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0)_35%)]"
+      class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0)_90%)]"
     >
     </div>
     <h1 class="relative text-black font-bold text-4xl">

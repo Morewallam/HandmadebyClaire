@@ -1,12 +1,8 @@
 ---
 import "../../../styles/global.css";
-import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
-import ImageRender from "../../../components/ImageRender.astro";
-import ArtProduct from "../../../components/ArtProduct.astro";
-import { length } from "astro:schema";
 import MainLayout from "../../../layouts/MainLayout.astro";
-import TitleImage from "../../../components/TitleImage.astro";
+import Selection, { type Page } from "../../../components/Selection.astro";
 
 const PRODUCT_QUERY = `*[_type == "theme" && slug.current==$theme][0] {
   _id,
@@ -14,11 +10,12 @@ const PRODUCT_QUERY = `*[_type == "theme" && slug.current==$theme][0] {
   slug,
   image,
   "products": *[_type == "product" && references(^._id) && defined(slug.current)]
-  |order(publishedAt asc){
+  |order(order asc){
     _id, 
     IndividualProductName,
     slug,
     MainImage,
+    order,
     Category-> {
         title,
         slug
@@ -40,10 +37,7 @@ const PRODUCT_QUERY = `*[_type == "theme" && slug.current==$theme][0] {
     }
 }`;
 
-const themeItems = await sanityClient.fetch<SanityDocument>(
-  PRODUCT_QUERY,
-  Astro.params,
-);
+const themeItems = await sanityClient.fetch<Page>(PRODUCT_QUERY, Astro.params);
 
 type paths = Promise<{ params: { theme: string } }[]>;
 
@@ -58,33 +52,6 @@ let m = [1];
 m.length;
 ---
 
-<MainLayout>
-  <div>
-    <TitleImage image={themeItems.image} title={themeItems.title} />
-
-    <div class="p-8 flex flex-wrap gap-3 justify-center items-center">
-      {
-        themeItems.products.length > 0 ? (
-          themeItems.products.map((item: any) => (
-            <div class="w-60">
-              <ArtProduct
-                image={item.MainImage}
-                name={item.IndividualProductName}
-                slug={item.slug}
-                theme={item.Theme.title}
-                type={item.Category.title}
-                size={item.Size[0].title}
-              />
-            </div>
-          ))
-        ) : (
-          <div class="center">
-            <span class="text-center">
-              There are currently no {themeItems.title} products
-            </span>
-          </div>
-        )
-      }
-    </div>
-  </div>
+<MainLayout title={themeItems.title}>
+  <Selection page={themeItems} />
 </MainLayout>

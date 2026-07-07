@@ -1,0 +1,65 @@
+---
+import type { SanityImageSource } from "@sanity/image-url";
+import ArtProduct from "./ArtProduct.astro";
+import TitleImage from "./TitleImage.astro";
+
+export interface Page {
+  image: SanityImageSource;
+  title: string;
+  products: {
+    MainImage: SanityImageSource;
+    IndividualProductName: string;
+    slug: string;
+    Theme: {
+      title: string;
+    };
+    Category: {
+      title: string;
+    };
+    Size: {
+      title: string;
+    };
+  }[];
+}
+
+export interface Props {
+  page: Page;
+}
+
+const {
+  page: { image, title, products },
+} = Astro.props;
+
+const { page } = Astro.props;
+---
+
+<div>
+  <TitleImage image={image} title={title} />
+
+  <div
+    class="pt-8 pb-8 p-2 md:p-8 flex flex-wrap gap-3 justify-center items-center"
+  >
+    {
+      products.length > 0 ? (
+        products.map((item: any) => (
+          <div>
+            <ArtProduct
+              image={item.MainImage}
+              name={item.IndividualProductName}
+              slug={item.slug}
+              theme={item.Theme.title}
+              type={item.Category.title}
+              size={item.Size[0].title}
+            />
+          </div>
+        ))
+      ) : (
+        <div class="center">
+          <span class="text-center">
+            There are currently no {title} products
+          </span>
+        </div>
+      )
+    }
+  </div>
+</div>

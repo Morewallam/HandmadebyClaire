@@ -35,15 +35,15 @@ const { image, name, slug, type = "theme", size = "small" } = Astro.props;
 {
   size === "large" && (
     <a href={`/works/${type}/${slug.current}`} class="block">
-      <div class="p-4 shadow-xs bg-stone-100 group transition-transform duration-300 hover:scale-110">
+      <div class="p-4 shadow-xs bg-stone-100 group transition-all duration-300 hover:scale-110 max-w-38 md:max-w-60  hover:shadow-lg ">
         <ImageRender
           image={image}
-          width={700}
-          style="aspect-rectangle drop-shadow object-cover h-40 w-40 group-hover:opacity-95 object-center"
+          width={500}
+          style="aspect-rectangle drop-shadow object-cover h-30 w-30 md:h-40 md:w-40 object-center"
         />
-        <div class="mt-4">
+        <div class="mt-4 h-10">
           <div>
-            <h3 class="text-md text-gray-700">
+            <h3 class="text-sm md:text-base text-gray-700 text-wrap ">
               <span aria-hidden="true" class="inset-0" />
               {name}
             </h3>

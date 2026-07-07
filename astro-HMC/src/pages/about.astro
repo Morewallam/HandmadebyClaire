@@ -5,6 +5,8 @@ import ImageRender from "../components/ImageRender.astro";
 import type { PortableTextBlock } from "sanity";
 import type { SanityImageSource } from "@sanity/image-url";
 import MainLayout from "../layouts/MainLayout.astro";
+import HorizontalScroll from "../components/HorizontalScroll.astro";
+import ScrollCard from "../components/ScrollCard.astro";
 
 const ABOUT_PAGE_QUERY = `*[
   _type == "aboutpage"][0]{
@@ -28,7 +30,7 @@ const about_page_info = await sanityClient.fetch<{
 }>(ABOUT_PAGE_QUERY);
 ---
 
-<MainLayout title="Handmade By Claire">
+<MainLayout title="About">
   <div class="bg-olive-200">
     <!-- About Me -->
     <div
@@ -76,7 +78,7 @@ const about_page_info = await sanityClient.fetch<{
           <ImageRender
             image={about_page_info.studio_image}
             width={800}
-            style="w-full object-cover rounded-sm md:h-full"
+            style="w-full aobject-cover rounded-sm md:h-full"
           />
         </div>
         <div
@@ -100,22 +102,42 @@ const about_page_info = await sanityClient.fetch<{
         </div>
       </h2>
 
-      <div
-        class="max-w-5xl w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8"
-      >
-        {
-          about_page_info.event_images.map((img) => (
-            <ImageRender
-              image={img}
-              width={500}
-              style="w-full h-64 object-cover rounded-sm"
-            />
-          ))
-        }
+      <!-- <p class="text-sm uppercase tracking-widest text-taupe-500 mb-4">
+      Swipe to explore →
+    </p> -->
+
+      <div class="w-full min-w-0 relative">
+        <!-- Edge fade gradients -->
+        <div
+          class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-olive-200 to-transparent z-10 pointer-events-none"
+        >
+        </div>
+        <div
+          class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-olive-200 to-transparent z-10 pointer-events-none"
+        >
+        </div>
+
+        <HorizontalScroll center={true}>
+          {
+            about_page_info.event_images.map((img) => (
+              <ScrollCard>
+                <div class="w-72 group">
+                  <div class="overflow-hidden rounded-md shadow-md ">
+                    <ImageRender
+                      image={img}
+                      width={500}
+                      style="w-full h-64 object-cover rounded-md"
+                    />
+                  </div>
+                </div>
+              </ScrollCard>
+            ))
+          }
+        </HorizontalScroll>
       </div>
 
       <div
-        class="max-w-3xl w-full text-lg text-taupe-800 text-center [&_p]:leading-relaxed [&_p]:mb-4"
+        class="max-w-3xl w-full text-lg text-taupe-800 text-center [&_p]:leading-relaxed [&_p]:mb-4 mt-8"
       >
         <Description description={about_page_info.event_history_description} />
       </div>

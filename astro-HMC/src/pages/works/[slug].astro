@@ -2,9 +2,6 @@
 import "../../styles/global.css";
 import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
-import { PortableText } from "astro-portabletext";
-import ArtProduct from "../../components/ArtProduct.astro";
-import ImageRender from "../../components/ImageRender.astro";
 import Description from "../../components/Description.astro";
 import { urlFor } from "../../helper/imageUrlHelper";
 import HorizontalScroll from "../../components/HorizontalScroll.astro";
@@ -71,11 +68,11 @@ export async function getStaticPaths(): paths {
 }
 ---
 
-<MainLayout>
+<MainLayout title={post.IndividualProductName}>
   <div class="bg-olive-50 text-gray-900">
     <div class="max-w-5xl mx-auto px-6 py-10">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div class="flex flex-col gap-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-12">
+        <div class="flex flex-col items gap-5">
           <div>
             <h1 class="text-3xl font-bold text-gray-900 mb-2">
               {post.IndividualProductName}
@@ -90,7 +87,6 @@ export async function getStaticPaths(): paths {
             </div>
           </div>
 
-          <!-- Description -->
           <p class="text-gray-600 text-sm leading-relaxed">
             <Description description={post.Description} />
           </p>
@@ -106,9 +102,9 @@ export async function getStaticPaths(): paths {
           </div>
         </div>
 
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col items-center gap-4">
           <div
-            class="w-105 h-120 rounded-xl flex items-center justify-center overflow-hidden"
+            class="max-w-105 max-h-120 rounded-xl flex items-center justify-center overflow-hidden"
           >
             <img
               src={urlFor(post.MainImage).height(500).url()}
@@ -118,11 +114,9 @@ export async function getStaticPaths(): paths {
             />
           </div>
 
-          <!-- Thumbnails -->
-          <!-- <div class="rounded-lg shadow-m bg-gray-100 w-105 p-3"> -->
           {
             post.SubImage && (
-              <HorizontalScroll gap="" padding="">
+              <HorizontalScroll gap="" padding="" center={true}>
                 <ScrollCard padding="p-1">
                   <button
                     data-thumb={urlFor(post.MainImage).height(500).url()}
@@ -161,7 +155,6 @@ export async function getStaticPaths(): paths {
         </div>
 
         <script>
-          // Thumbnail switcher
           const mainImg = document.getElementById(
             "main-img",
           ) as unknown as ImageRenderProps;

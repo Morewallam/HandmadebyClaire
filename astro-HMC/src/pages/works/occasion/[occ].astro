@@ -1,11 +1,8 @@
 ---
 import "../../../styles/global.css";
-import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
-import ImageRender from "../../../components/ImageRender.astro";
-import ArtProduct from "../../../components/ArtProduct.astro";
 import MainLayout from "../../../layouts/MainLayout.astro";
-import TitleImage from "../../../components/TitleImage.astro";
+import Selection, { type Page } from "../../../components/Selection.astro";
 
 const PRODUCT_QUERY = `*[_type == "occasion" && slug.current==$occ][0] {
   _id,
@@ -39,7 +36,7 @@ const PRODUCT_QUERY = `*[_type == "occasion" && slug.current==$occ][0] {
     }
 }`;
 
-const categoryItems = await sanityClient.fetch<SanityDocument>(
+const categoryItems = await sanityClient.fetch<Page>(
   PRODUCT_QUERY,
   Astro.params,
 );
@@ -54,32 +51,6 @@ export async function getStaticPaths(): paths {
 }
 ---
 
-<MainLayout>
-  <div>
-    <TitleImage image={categoryItems.image} title={categoryItems.title} />
-    <div class="p-8 flex flex-wrap gap-3 justify-center items-center">
-      {
-        categoryItems.products.length > 0 ? (
-          categoryItems.products.map((item: any) => (
-            <div class="w-60">
-              <ArtProduct
-                image={item.MainImage}
-                name={item.IndividualProductName}
-                slug={item.slug}
-                theme={item.Theme.title}
-                type={item.Category.title}
-                size={item.Size[0].title}
-              />
-            </div>
-          ))
-        ) : (
-          <div class="center">
-            <span class="text-center">
-              There are currently no {categoryItems.title} products
-            </span>
-          </div>
-        )
-      }
-    </div>
-  </div>
+<MainLayout title={categoryItems.title}>
+  <Selection page={categoryItems} />
 </MainLayout>
