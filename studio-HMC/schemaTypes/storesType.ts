@@ -25,11 +25,6 @@ export const storeType = defineType({
         type:'array',
         of:[{type:"block"}]
     }),
-    // defineField({
-    //     name: "Location",
-    //     type: 'geopoint',
-    //     validation:rule=>rule.required()
-    // }),
     defineField({
         name: "Address",
         type:'string',

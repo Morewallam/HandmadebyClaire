@@ -7,11 +7,21 @@ export interface Props {
   limit?: number;
 }
 
-const { events, limit = 3 } = Astro.props;
+const { events, limit = 2 } = Astro.props;
 ---
 
 <event-manager data-events={JSON.stringify(events)} data-limit={limit}>
-  <HorizontalScroll padding="" gap="gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2">
+    {
+      events.map((evt, i: number) => (
+        <div id={"eventcard" + String(i)} class="oldcard p-2">
+          <EventCard eventToDisplay={evt} />
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- <HorizontalScroll padding="" gap="gap-4">
     {
       events.map((evt, i: number) => (
         <div
@@ -22,7 +32,7 @@ const { events, limit = 3 } = Astro.props;
         </div>
       ))
     }
-  </HorizontalScroll>
+  </HorizontalScroll> -->
 </event-manager>
 
 <style>

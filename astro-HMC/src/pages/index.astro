@@ -19,7 +19,7 @@ import StoreCard from "../components/StoreCard.astro";
 import EventManager from "../components/EventManager.astro";
 
 const FRONT_PAGE_QUERY = `*[
-  _type == "frontpage"][1]{
+  _type == "frontPage"][0]{
     _id, 
     quote,
     message,
@@ -269,20 +269,20 @@ const stores = await sanityClient.fetch<
       <div class="p-4">
         <h1 class="text-xl">Upcoming Events</h1>
         <div
-          class="max-w-[90vw] lg:max-w-[50vw] relative border-solid pb-2 pt-2 border-gray-100 bg-white/80"
+          class="max-w-[90vw] lg:max-w-[50vw] relative border-solid pb-2 pt-2 border-gray-100"
         >
-          <div
+          <!-- <div
             class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-taupe-100 to-transparent z-10 pointer-events-none"
           >
           </div>
           <div
             class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-taupe-100 to-transparent z-10 pointer-events-none"
           >
-          </div>
-          <EventManager events={cardEvents} limit={3} />
+          </div> -->
+          <EventManager events={cardEvents} limit={2} />
         </div>
       </div>
-      <div class="bg-white/80 w-[95vw] lg:w-md xl:w-lg rounded-lg">
+      <div class="bg-white/80 w-[95vw] lg:w-md xl:w-lg rounded-lg shadow-md">
         <Calendar events={calendarEvents} client:visible />
       </div>
     </div>
