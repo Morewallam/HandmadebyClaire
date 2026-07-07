@@ -32,10 +32,10 @@ const {
   },
 } = Astro.props;
 
-function formatDate(date: string) {
-  const parsedDate = new Date(date);
+function formatDate(date: string, start: string) {
+  const parsedDate = new Date(`${date}T${start}`);
 
-  return parsedDate.toDateString();
+  return parsedDate.toLocaleDateString();
 }
 function formatTime(time: string) {
   const date = new Date();
@@ -65,7 +65,7 @@ function formatTime(time: string) {
       startTime && (
         <div class="flex items-center gap-2 text-gray-600 text-sm">
           <div>
-            <div>{formatDate(date)}</div>
+            <div>{formatDate(date, startTime)}</div>
             {endTime && (
               <div>
                 {formatTime(startTime)} – {formatTime(endTime)}
