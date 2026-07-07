@@ -9,7 +9,7 @@ export interface Props {
 }
 
 export interface eventType {
-  title: string;
+  eventName: string;
   image: SanityImageSource;
   description: PortableTextBlock;
   startTime: string;
@@ -21,7 +21,7 @@ export interface eventType {
 
 const {
   eventToDisplay: {
-    title,
+    eventName,
     image,
     description,
     startTime,
@@ -35,7 +35,7 @@ const {
 function formatDate(date: string, start: string) {
   const parsedDate = new Date(`${date}T${start}`);
 
-  return parsedDate.toLocaleDateString();
+  return parsedDate.toDateString();
 }
 function formatTime(time: string) {
   const date = new Date();
@@ -52,13 +52,17 @@ function formatTime(time: string) {
 >
   {
     image && (
-      <ImageRender image={image} alt={title} style="w-full h-48 object-cover" />
+      <ImageRender
+        image={image}
+        alt={eventName}
+        style="w-full h-48 object-cover"
+      />
     )
   }
 
   <div class="p-6">
     <div class="flex items-start justify-between">
-      <h2 class="text-xl font-bold text-gray-900">{title}</h2>
+      <h2 class="text-lg font-bold text-gray-900">{eventName}</h2>
     </div>
 
     {
@@ -78,7 +82,7 @@ function formatTime(time: string) {
 
     {
       address && (
-        <div class="flex items-center gap-2 text-gray-600 text-sm">
+        <div class="flex items-center gap-2 text-gray-600 text-sm py-4">
           <span>{address}</span>
         </div>
       )
