@@ -84,7 +84,7 @@ export const eventType = defineType({
             },
             prepare({ date, start, end }) {
             return {
-                title: date ? new Date(date).toLocaleDateString() : 'No date',
+                title: date ? date : 'No date',
                 subtitle: start && end ? `${start} – ${end}` : 'No times set',
                 media: CalendarIcon,
             }
