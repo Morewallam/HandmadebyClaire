@@ -112,3 +112,5 @@ studio-HMC/*.tsbuildinfo
 # Dotenv and similar local-only files
 studio-HMC/*.local
 .vercel
+
+.vscode
