@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { urlFor } from "../helper/imageUrlHelper";
 import { type SanityImageSource } from "@sanity/image-url";
+import { length } from "astro:schema";
 
 export interface Props {
   image: SanityImageSource;
@@ -9,9 +10,19 @@ export interface Props {
   height?: number;
   style?: string;
   alt: string;
+  lazy?: boolean;
+  fetch_priority?: "auto" | "high";
 }
 
-const { image, width, height, style, alt, id } = Astro.props;
+const {
+  image,
+  width,
+  height,
+  style,
+  alt,
+  lazy = true,
+  fetch_priority = "auto",
+} = Astro.props;
 
 let imgUrl = urlFor(image).auto("format");
 let baseUrl = imgUrl;
@@ -22,11 +33,13 @@ if (width) {
 if (height) {
   baseUrl = baseUrl.height(height);
 }
+
+const load = lazy ? "lazy" : "eager";
 ---
 
 <img
   src={baseUrl.url()}
-  loading="lazy"
+  loading={load}
   srcset={[
     `${imgUrl.width(200).url()} 200w`,
     `${imgUrl.width(400).url()} 400w`,
@@ -38,5 +51,6 @@ if (height) {
   ].join(", ")}
   alt={alt}
   sizes="auto"
+  fetchpriority={fetch_priority}
   class={style}
 />

@@ -16,6 +16,9 @@ export default defineConfig({
       plugins: [tailwindcss()],
     },
 
+  build: {
+    inlineStylesheets: 'auto',
+  },
   integrations: [sanity({
     projectId: "o6hp51kg",
     dataset: "production",
