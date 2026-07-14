@@ -48,6 +48,10 @@ export async function getStaticPaths(): paths {
 }
 ---
 
-<MainLayout title={themeItems.title}>
+<MainLayout
+  title={themeItems.title}
+  description=`View ${themeItems.title} theme items`
+  image={themeItems.image}
+>
   <Selection page={themeItems} />
 </MainLayout>

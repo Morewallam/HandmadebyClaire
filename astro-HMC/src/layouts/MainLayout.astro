@@ -1,7 +1,8 @@
 ---
 import "../styles/global.css";
-const { title } = Astro.props;
+const { title, description, image } = Astro.props;
 import { Font } from "astro:assets";
+import { urlFor } from "../helper/imageUrlHelper";
 ---
 
 <style>
@@ -17,6 +18,16 @@ import { Font } from "astro:assets";
 
     <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
+
+    <meta property="og:title" content={title} />
+    {
+      image && (
+        <meta property="og:image" content={urlFor(image).width(1200).url()} />
+      )
+    }
+    <meta name="description" content={description} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
     <Font cssVariable="--font-tempus" />
   </head>
   <body class="font-seriff bg-olive-200">

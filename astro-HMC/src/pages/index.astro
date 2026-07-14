@@ -18,6 +18,7 @@ import StoreCard, { type StoreType } from "../components/StoreCard.astro";
 
 import EventManager from "../components/EventManager.astro";
 import type { eventType } from "../components/EventCard.astro";
+import { toPlainText } from "../helper/plainTextPortable";
 
 const FRONT_PAGE_QUERY = `*[
   _type == "frontPage"][0]{
@@ -122,7 +123,10 @@ const STORE_QUERY = `
 const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
 ---
 
-<MainLayout title="Handmade By Claire">
+<MainLayout
+  title="Handmade By Claire"
+  description={toPlainText(front_page_info.message)}
+>
   <div class="bg-olive-200">
     <div>
       <div id="Main Image" class="relative w-full h-[95svh] overflow-hidden">

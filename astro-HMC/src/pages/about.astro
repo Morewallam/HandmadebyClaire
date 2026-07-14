@@ -7,6 +7,7 @@ import type { SanityImageSource } from "@sanity/image-url";
 import MainLayout from "../layouts/MainLayout.astro";
 import HorizontalScroll from "../components/HorizontalScroll.astro";
 import ScrollCard from "../components/ScrollCard.astro";
+import { toPlainText } from "../helper/plainTextPortable";
 
 const ABOUT_PAGE_QUERY = `*[
   _type == "aboutpage"][0]{
@@ -30,7 +31,11 @@ const about_page_info = await sanityClient.fetch<{
 }>(ABOUT_PAGE_QUERY);
 ---
 
-<MainLayout title="About">
+<MainLayout
+  title="About"
+  description={toPlainText(about_page_info.about_me_description)}
+  image={about_page_info.about_image}
+>
   <div class="bg-olive-200">
     <!-- About Me -->
     <div
