@@ -1,8 +1,20 @@
 ---
 import "../styles/global.css";
 import ImageRender from "./ImageRender.astro";
+import type { SanityImageSource } from "@sanity/image-url";
+import type { Slug } from "sanity";
 
-const { image, name, theme, type, size, slug } = Astro.props;
+export interface HalfProduct {
+  name: string;
+  slug: Slug;
+  mainImage: SanityImageSource;
+  category: { title: string; slug: Slug };
+  theme: { title: string; slug: Slug };
+}
+
+export interface Props extends HalfProduct {}
+
+const { mainImage, name, theme, category, slug } = Astro.props;
 ---
 
 <a href={`/works/${slug.current}`} class="block">
@@ -10,8 +22,9 @@ const { image, name, theme, type, size, slug } = Astro.props;
     class="p-4 rounded-sm shadow-xs bg-stone-100 group transition-transform duration-300 hover:scale-110 h-80 md:h-120 w-40 sm:w-45 md:w-60"
   >
     <ImageRender
-      image={image}
+      image={mainImage}
       width={500}
+      alt={name}
       style="aspect-rectangle w-full drop-shadow rounded-md object-contain h-40 md:h-80  group-hover:opacity-95 object-center"
     />
     <div class="mt-4 md:mt-4">
@@ -20,9 +33,13 @@ const { image, name, theme, type, size, slug } = Astro.props;
           <span aria-hidden="true" class="inset-0"></span>
           <span>{name}</span>
         </h3>
-        <p class="text-xs md:text-sm font-medium text-taupe-600">{theme}</p>
+        <p class="text-xs md:text-sm font-medium text-taupe-600">
+          {theme.title}
+        </p>
       </div>
-      <p class="text-sm md:text-md font-medium text-taupe-700">{type}</p>
+      <p class="text-sm md:text-md font-medium text-taupe-700">
+        {category.title}
+      </p>
     </div>
   </div>
 </a>

@@ -21,8 +21,7 @@ export default defineConfig({
             S.documentListItem({schemaType:"frontPage",id:'frontPage', title:'Front Page'}),
             S.documentListItem({schemaType:"aboutpage",id:'aboutpage', title:'About Page'}),
             S.documentListItem({schemaType:"workshoppage",id:'workshoppage', title:'Workshop Page'}),
-
-            // Spread the rest of your document types, excluding frontPage
+            
             ...S.documentTypeListItems().filter(
               (item) => item.getId() !== 'frontPage' && item.getId() !== 'aboutpage' && item.getId() !== 'workshoppage'
             ),

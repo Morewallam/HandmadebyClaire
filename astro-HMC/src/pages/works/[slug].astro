@@ -1,48 +1,56 @@
 ---
 import "../../styles/global.css";
-import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
 import Description from "../../components/Description.astro";
 import { urlFor } from "../../helper/imageUrlHelper";
 import HorizontalScroll from "../../components/HorizontalScroll.astro";
 import ScrollCard from "../../components/ScrollCard.astro";
 import MainLayout from "../../layouts/MainLayout.astro";
+import type { SanityImageSource } from "@sanity/image-url";
+import type { PortableTextBlock, Slug } from "sanity";
+import type { HalfProduct } from "../../components/ArtProduct.astro";
 
-const POST_QUERY = `*[
+export interface Product extends HalfProduct {
+  subImages?: SanityImageSource[];
+  occasion?: { title: string; slug: Slug }[];
+  description: PortableTextBlock;
+  size: { title: string; slug: Slug }[];
+}
+
+const PRODUCT_QUERY = `*[
   _type == "product"
   && slug.current == $slug][0]{
     _id, 
-    IndividualProductName,
+    "name":IndividualProductName,
     slug,
-    MainImage,
-    SubImage,
-    Category->{
+    "mainImage":MainImage,
+    "subImages":SubImage[],
+    "category":Category->{
         title,
         slug
     },
-    Size[]->{
+    "size":Size[]->{
         title,
         slug
     },
-    Theme->{
+    "theme":Theme->{
         title,
         slug
     },
-    Occasion[]->{
+    "occasion":Occasion[]->{
         title,
         slug
     },
-    Description,
-    publishedAt
+    "description":Description
     }`;
 
-const post = await sanityClient.fetch<SanityDocument>(POST_QUERY, Astro.params);
+const product = await sanityClient.fetch<Product>(PRODUCT_QUERY, Astro.params);
 
 type paths = Promise<{ params: { slug: string } }[]>;
 
 let combinedSizes = "";
-post.Size.map((s: any, i: int) => {
-  if (i < post.Size.length - 1) {
+product.size.map((s, i: number) => {
+  if (i < product.size.length - 1) {
     combinedSizes += s.title + ", ";
   } else {
     combinedSizes += s.title;
@@ -50,12 +58,13 @@ post.Size.map((s: any, i: int) => {
 });
 
 let combinedOccassions = "";
-if (post.Occasion) {
-  post.Occasion.map((s: any, i: int) => {
-    if (i < post.Occasion.length - 1) {
-      combinedOccassions += s.title + ", ";
+if (product.occasion) {
+  const len = product.occasion.length;
+  product.occasion.map((occasion, i: number) => {
+    if (i < len - 1) {
+      combinedOccassions += occasion.title + ", ";
     } else {
-      combinedOccassions += s.title;
+      combinedOccassions += occasion.title;
     }
   });
 }
@@ -68,17 +77,18 @@ export async function getStaticPaths(): paths {
 }
 ---
 
-<MainLayout title={post.IndividualProductName}>
+<MainLayout title={product.name}>
   <div class="bg-olive-50 text-gray-900">
     <div class="max-w-5xl mx-auto px-6 py-10">
       <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-2 md:gap-12">
         <div class="flex flex-col items gap-5">
           <div>
             <h1 class="text-3xl font-bold text-gray-900 mb-2">
-              {post.IndividualProductName}
+              {product.name}
             </h1>
             <div>
-              <span class="text-gray-500 text-lg">{post.Category.title}</span>
+              <span class="text-gray-500 text-lg">{product.category.title}</span
+              >
             </div>
             <div>
               <span class="text-gray-500">
@@ -88,7 +98,7 @@ export async function getStaticPaths(): paths {
           </div>
 
           <p class="text-gray-600 text-sm leading-relaxed">
-            <Description description={post.Description} />
+            <Description description={product.description} />
           </p>
 
           <div>
@@ -107,32 +117,32 @@ export async function getStaticPaths(): paths {
             class="max-w-105 h-120 rounded-xl flex items-center justify-center overflow-hidden"
           >
             <img
-              src={urlFor(post.MainImage).height(500).url()}
-              alt={post.alt}
+              src={urlFor(product.mainImage).height(500).url()}
+              alt={product.name}
               class="w-full h-full rounded-xl object-contain drop-shadow-lg/30 p-5"
               id="main-img"
             />
           </div>
 
           {
-            post.SubImage && (
+            product.subImages && (
               <HorizontalScroll gap="" padding="" center={true}>
                 <ScrollCard padding="p-1">
                   <button
-                    data-thumb={urlFor(post.MainImage).height(500).url()}
+                    data-thumb={urlFor(product.mainImage).height(500).url()}
                     class:list={[
                       "thumb border-2 border-indigo-500 rounded-lg overflow-hidden w-24 h-24 flex-shrink-0 transition-transform duration-300 hover:scale-105 hover:cursor-pointer shadow",
                     ]}
                   >
                     <img
-                      src={urlFor(post.MainImage).height(100).url()}
-                      alt={post.alt}
+                      src={urlFor(product.mainImage).height(100).url()}
+                      alt={product.name}
                       class="w-full h-full object-contain"
                     />
                   </button>
                 </ScrollCard>
 
-                {post.SubImage.map((image: any) => (
+                {product.subImages.map((image) => (
                   <ScrollCard padding="p-1">
                     <button
                       data-thumb={urlFor(image).height(500).url()}
@@ -143,7 +153,7 @@ export async function getStaticPaths(): paths {
                     >
                       <img
                         src={urlFor(image).height(100).url()}
-                        alt={image.alt}
+                        alt={product.name}
                         class="w-full h-full object-contain"
                       />
                     </button>
@@ -155,9 +165,7 @@ export async function getStaticPaths(): paths {
         </div>
 
         <script>
-          const mainImg = document.getElementById(
-            "main-img",
-          ) as unknown as ImageRenderProps;
+          const mainImg = document.getElementById("main-img") as any;
           document
             .querySelectorAll<HTMLButtonElement>(".thumb")
             .forEach((btn) => {

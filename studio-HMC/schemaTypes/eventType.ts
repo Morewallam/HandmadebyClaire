@@ -16,7 +16,7 @@ export const eventType = defineType({
     defineField({
       name: 'slug',
       type: 'slug',
-      options: { source: 'EventName' }  // auto-generates from title
+      options: { source: 'EventName' } 
     }),
     defineField({
       name: 'Image',
@@ -25,7 +25,8 @@ export const eventType = defineType({
     defineField({
         name:"Description",
         type:'array',
-        of:[{type:"block"}]
+        of:[{type:"block"}],
+        validation: (Rule) => Rule.required()
     }),
     defineField({
         name:"Stall",
@@ -55,7 +56,7 @@ export const eventType = defineType({
                 title: 'Start Time',
                 type: 'string',
                 components: {
-                    input: TimeInput, // custom input — see below
+                    input: TimeInput, 
                 },
                 validation: (Rule) => Rule.required(),
             }),

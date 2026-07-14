@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {HighlightIcon} from '@sanity/icons'
-// schemas/category.js
+
 export const workshop = defineType({
   name: 'workshoppage',
   title: 'Workshop Page',

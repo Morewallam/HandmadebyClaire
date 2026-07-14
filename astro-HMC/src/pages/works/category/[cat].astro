@@ -13,27 +13,26 @@ const PRODUCT_QUERY = `*[_type == "category" && slug.current==$cat][0] {
   |order(order asc){
     _id,
     order, 
-    IndividualProductName,
+    "name":IndividualProductName,
     slug,
-    MainImage,
-    Category-> {
+    "mainImage":MainImage,
+    "category":Category-> {
         title,
         slug
     },
-    Size[]->{
+    "size":Size[]->{
         title,
         slug
     },
-    Theme->{
+    "theme":Theme->{
         title,
         slug
     },
-    Occasion[]->{
+    "occasion":Occasion[]->{
         title,
         slug
     },
-    Description,
-    publishedAt
+    "description":Description,
     }
 }`;
 

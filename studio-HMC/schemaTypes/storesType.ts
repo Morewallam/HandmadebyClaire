@@ -14,21 +14,22 @@ export const storeType = defineType({
     defineField({
       name: 'slug',
       type: 'slug',
-      options: { source: 'EventName' }  // auto-generates from title
+      options: { source: 'StoreName' } 
     }),
     defineField({
       name: 'Image',
       type: 'image',
+      validation: (rule) => rule.required()
     }),
     defineField({
         name:"Description",
         type:'array',
-        of:[{type:"block"}]
+        of:[{type:"block"}],
+        validation: (rule) => rule.required()
     }),
     defineField({
         name: "Address",
         type:'string',
-        validation:rule=>rule.required()
     }),
     defineField({
         name: "URL",

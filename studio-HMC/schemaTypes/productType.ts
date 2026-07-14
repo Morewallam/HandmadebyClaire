@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 
-export const postType = defineType({
+export const productType = defineType({
   name: 'product',
   title: 'Individual Product',
   type: 'document',
@@ -13,7 +13,8 @@ export const postType = defineType({
     defineField({
       name: 'slug',
       type: 'slug',
-      options: { source: 'IndividualProductName' }  // auto-generates from title
+      options: { source: 'IndividualProductName' },
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'MainImage',

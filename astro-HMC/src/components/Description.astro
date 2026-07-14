@@ -1,6 +1,12 @@
 ---
-const { description } = Astro.props;
 import { toHTML } from "@portabletext/to-html";
+import type { PortableTextBlock } from "sanity";
+
+export interface Props {
+  description: PortableTextBlock;
+}
+
+const { description } = Astro.props;
 
 const descriptionHTML = toHTML(description, {
   components: {

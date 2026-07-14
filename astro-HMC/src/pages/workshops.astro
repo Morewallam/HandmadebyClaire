@@ -17,7 +17,7 @@ const WORKSHOP_PAGE_QUERY = `*[
 const workshop_page_info = await sanityClient.fetch<{
   _id: string;
   workshop_description: PortableTextBlock;
-  images: SanityImageSource[];
+  images?: SanityImageSource[];
 }>(WORKSHOP_PAGE_QUERY);
 ---
 
@@ -43,24 +43,26 @@ const workshop_page_info = await sanityClient.fetch<{
         class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-olive-200 to-transparent z-10 pointer-events-none"
       >
       </div>
-
-      <HorizontalScroll center={true}>
-        {
-          workshop_page_info.images.map((img) => (
-            <ScrollCard>
-              <div class="w-72 group">
-                <div class="overflow-hidden rounded-md shadow-md ">
-                  <ImageRender
-                    image={img}
-                    width={500}
-                    style="w-full h-64 object-cover rounded-md"
-                  />
+      {
+        workshop_page_info.images && (
+          <HorizontalScroll center={true}>
+            {workshop_page_info.images.map((img) => (
+              <ScrollCard>
+                <div class="w-72 group">
+                  <div class="overflow-hidden rounded-md shadow-md ">
+                    <ImageRender
+                      alt="workshop images"
+                      image={img}
+                      width={500}
+                      style="w-full h-64 object-cover rounded-md"
+                    />
+                  </div>
                 </div>
-              </div>
-            </ScrollCard>
-          ))
-        }
-      </HorizontalScroll>
+              </ScrollCard>
+            ))}
+          </HorizontalScroll>
+        )
+      }
     </div>
 
     <div

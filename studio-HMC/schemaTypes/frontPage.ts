@@ -1,6 +1,6 @@
-import {defineField} from 'sanity'
+import {defineField, defineType} from 'sanity'
 
-export default{
+export const frontPage = defineType({
   name: 'frontPage',
   title: 'Front Page',
   type: 'document',
@@ -49,14 +49,14 @@ export default{
   ],
   preview: {
     select: {
-      media: 'main_image', // 👈 Selects the image field defined above
+      media: 'main_image',
     },
     prepare({media}) {
       return {
         title: "Front Page",
-        media:media // This is what appears in Studio lists and references
+        media:media 
         
       }
     }
   }
-}
+})

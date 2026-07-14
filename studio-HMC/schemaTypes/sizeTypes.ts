@@ -1,8 +1,9 @@
 import {defineField, defineType} from 'sanity'
-// schemas/category.js
+
+
 export const sizeType = defineType({
   name: 'size',
-  title: 'Sizing', //12"x13"
+  title: 'Sizing',
   type: 'document',
   fields: [
     defineField(
@@ -16,7 +17,8 @@ export const sizeType = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title' }  // auto-generates from title
+      options: { source: 'title' } ,
+      validation: (rule) => rule.required() 
     }),
     defineField({
       name: 'description',
@@ -27,7 +29,6 @@ export const sizeType = defineType({
         name:'image',
         title:'Image',
         type:'image',
-        // validation: (rule) => rule.required()
     }),
      defineField({
           name: "order",

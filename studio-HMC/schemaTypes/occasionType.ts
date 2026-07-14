@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
-// schemas/category.js
+
+
 export const occasionType = defineType({
   name: 'occasion',
   title: 'Occasion',
@@ -16,7 +17,8 @@ export const occasionType = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title' }  // auto-generates from title
+      options: { source: 'title' },
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'description',
@@ -27,6 +29,7 @@ export const occasionType = defineType({
         name:'image',
         title:'Image',
         type:'image',
+        validation: (rule) => rule.required()
     }),
     defineField({
           name: "order",

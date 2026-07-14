@@ -11,29 +11,28 @@ const PRODUCT_QUERY = `*[_type == "theme" && slug.current==$theme][0] {
   image,
   "products": *[_type == "product" && references(^._id) && defined(slug.current)]
   |order(order asc){
-    _id, 
-    IndividualProductName,
+   _id,
+    order, 
+    "name":IndividualProductName,
     slug,
-    MainImage,
-    order,
-    Category-> {
+    "mainImage":MainImage,
+    "category":Category-> {
         title,
         slug
     },
-    Size[]->{
+    "size":Size[]->{
         title,
         slug
     },
-    Theme->{
+    "theme":Theme->{
         title,
         slug
     },
-    Occasion[]->{
+    "occasion":Occasion[]->{
         title,
         slug
     },
-    Description,
-    publishedAt
+    "description":Description,
     }
 }`;
 
@@ -47,9 +46,6 @@ export async function getStaticPaths(): paths {
     }`;
   return await sanityClient.fetch(SLUGS_QUERY);
 }
-
-let m = [1];
-m.length;
 ---
 
 <MainLayout title={themeItems.title}>

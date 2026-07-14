@@ -4,7 +4,7 @@ import "../styles/global.css";
 import { sanityClient } from "sanity:client";
 import Calendar from "../components/Calendar";
 import { urlFor } from "../helper/imageUrlHelper";
-import ArtProduct from "../components/ArtProduct.astro";
+import ArtProduct, { type HalfProduct } from "../components/ArtProduct.astro";
 import type { PortableTextBlock } from "sanity";
 import ImageRender from "../components/ImageRender.astro";
 import type { SanityImageSource } from "@sanity/image-url";
@@ -14,7 +14,7 @@ import ScrollCard from "../components/ScrollCard.astro";
 import Description from "../components/Description.astro";
 import MainLayout from "../layouts/MainLayout.astro";
 
-import StoreCard from "../components/StoreCard.astro";
+import StoreCard, { type StoreType } from "../components/StoreCard.astro";
 
 import EventManager from "../components/EventManager.astro";
 import type { eventType } from "../components/EventCard.astro";
@@ -27,15 +27,16 @@ const FRONT_PAGE_QUERY = `*[
     main_image,
     section_name,
     highlights[]->{
-      IndividualProductName,
+      "name":IndividualProductName,
       slug,
-      MainImage,
-      Category->{
+      "mainImage":MainImage,
+      "category":Category->{
         title
       },
-      Theme->{
+      "theme":Theme->{
         title
       },
+      "size":size
     },
     video_URL
     }`;
@@ -46,13 +47,7 @@ const front_page_info = await sanityClient.fetch<{
   message: PortableTextBlock;
   main_image: SanityImageSource;
   section_name: string;
-  highlights: {
-    IndividualProductName: string;
-    slug: { current: string };
-    MainImage: SanityImageSource;
-    Category: { title: string };
-    Theme: { title: string };
-  }[];
+  highlights: HalfProduct[];
   video_URL: string;
 }>(FRONT_PAGE_QUERY);
 
@@ -111,34 +106,20 @@ const quoteLines: string[] = quoteParts[0].split("\n");
 
 const STORE_QUERY = `
   *[_type == "store"] {
-    StoreName,
+    "storeName": StoreName,
     slug,
-    Image,
-    Description, 
-    Address,
-    URL,
-    ProductsSold[]->{
+    "storeImage": Image,
+    "description":Description, 
+    "address":Address,
+    "url":URL,
+    "productsSold":ProductsSold[]->{
       title,
       slug,
       image,
     }
   }
 `;
-const stores = await sanityClient.fetch<
-  {
-    StoreName: string;
-    slug?: { current: string };
-    Image: SanityImageSource;
-    Description: PortableTextBlock;
-    ProductsSold: {
-      image: SanityImageSource;
-      title: string;
-      slug: { current: string };
-    }[]; //Products
-    Address?: string;
-    URL?: string;
-  }[]
->(STORE_QUERY);
+const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
 ---
 
 <MainLayout title="Handmade By Claire">
@@ -146,6 +127,7 @@ const stores = await sanityClient.fetch<
     <div>
       <div id="Main Image" class="relative w-full h-[95svh] overflow-hidden">
         <ImageRender
+          alt="main image"
           image={front_page_info.main_image}
           style="w-full h-full object-cover object-center"
           width={2000}
@@ -196,11 +178,11 @@ const stores = await sanityClient.fetch<
               <ScrollCard>
                 <div>
                   <ArtProduct
-                    image={prod.MainImage}
-                    name={prod.IndividualProductName}
+                    mainImage={prod.mainImage}
+                    name={prod.name}
                     slug={prod.slug}
-                    theme={prod.Theme.title}
-                    type={prod.Category.title}
+                    theme={prod.theme}
+                    category={prod.category}
                   />
                 </div>
               </ScrollCard>
@@ -295,14 +277,7 @@ const stores = await sanityClient.fetch<
           {
             stores.map((store) => (
               <ScrollCard>
-                <StoreCard
-                  storeName={store.StoreName}
-                  description={store.Description}
-                  storeImage={store.Image}
-                  products={store.ProductsSold}
-                  address={store.Address}
-                  url={store.URL}
-                />
+                <StoreCard store={store} />
               </ScrollCard>
             ))
           }

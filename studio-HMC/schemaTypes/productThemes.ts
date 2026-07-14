@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-// schemas/category.js
+
 export const themeType = defineType({
   name: 'theme',
   title: 'Theme',
@@ -16,7 +16,7 @@ export const themeType = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title' }  // auto-generates from title
+      options: { source: 'title' } 
     }),
     defineField({
       name: 'description',
@@ -27,7 +27,7 @@ export const themeType = defineType({
         name:'image',
         title:'Image',
         type:'image',
-        // validation: (rule) => rule.required()
+        validation: (rule) => rule.required()
     }),
      defineField({
           name: "order",

@@ -1,25 +1,12 @@
 ---
 import type { SanityImageSource } from "@sanity/image-url";
-import ArtProduct from "./ArtProduct.astro";
+import ArtProduct, { type HalfProduct } from "./ArtProduct.astro";
 import TitleImage from "./TitleImage.astro";
 
 export interface Page {
   image: SanityImageSource;
   title: string;
-  products: {
-    MainImage: SanityImageSource;
-    IndividualProductName: string;
-    slug: string;
-    Theme: {
-      title: string;
-    };
-    Category: {
-      title: string;
-    };
-    Size: {
-      title: string;
-    };
-  }[];
+  products: HalfProduct[];
 }
 
 export interface Props {
@@ -29,8 +16,6 @@ export interface Props {
 const {
   page: { image, title, products },
 } = Astro.props;
-
-const { page } = Astro.props;
 ---
 
 <div>
@@ -41,15 +26,14 @@ const { page } = Astro.props;
   >
     {
       products.length > 0 ? (
-        products.map((item: any) => (
+        products.map((item) => (
           <div>
             <ArtProduct
-              image={item.MainImage}
-              name={item.IndividualProductName}
+              mainImage={item.mainImage}
+              name={item.name}
               slug={item.slug}
-              theme={item.Theme.title}
-              type={item.Category.title}
-              size={item.Size[0].title}
+              theme={item.theme}
+              category={item.category}
             />
           </div>
         ))

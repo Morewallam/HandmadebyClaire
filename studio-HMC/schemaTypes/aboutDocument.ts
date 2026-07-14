@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-// schemas/category.js
+
 export const aboutPage = defineType({
   name: 'aboutpage',
   title: 'About Page',
@@ -48,12 +48,12 @@ export const aboutPage = defineType({
   ],
   preview: {
     select: {
-      media: 'about_image', // 👈 Selects the image field defined above
+      media: 'about_image', 
     },
     prepare({media}) {
       return {
         title: "About Page",
-        media:media // This is what appears in Studio lists and references
+        media:media 
         
       }
     }
