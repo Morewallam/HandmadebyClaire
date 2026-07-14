@@ -1,0 +1,41 @@
+---
+import "../styles/global.css";
+import MainLayout from "../layouts/MainLayout.astro";
+---
+
+<MainLayout title="Page Not Found | Handmade By Claire">
+  <div
+    class="bg-olive-200 min-h-[90svh] w-full flex flex-col items-center justify-center p-24 text-center"
+  >
+    <h1
+      class="font-tempus text-6xl sm:text-8xl text-taupe-700 tracking-wide mb-4 pt-12"
+    >
+      404
+    </h1>
+
+    <div class="mx-auto mb-6 w-24 h-[2px] bg-taupe-700 rounded-full"></div>
+
+    <p class="text-taupe-700/80 text-base sm:text-lg mb-10 pt-4">
+      The page you're looking for may have moved, or never existed at all.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 p-8">
+      <a
+        href="/"
+        class="border border-taupe-700 text-taupe-700 px-8 py-3 tracking-widest
+        uppercase text-sm hover:bg-taupe-700 hover:text-white transition-colors
+        duration-300"
+      >
+        Back Home
+      </a>
+      <a
+        href="/works"
+        class="border border-taupe-700 text-taupe-700 px-8 py-3 tracking-widest
+        uppercase text-sm hover:bg-taupe-700 hover:text-white transition-colors
+        duration-300"
+      >
+        Browse Works
+      </a>
+    </div>
+  </div>
+</MainLayout>
