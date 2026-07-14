@@ -1,6 +1,4 @@
-# Handmade By Claire
-
-## Artist Portfolio Website
+# Handmade By Claire - Artist Portfolio Website
 
 ## About
 
@@ -11,11 +9,11 @@ This is a website developed for a local artist in the Vancouver area. She works 
 Built Using
 
 - Static Front End
-  - Astro
+  - **Astro**
     - Typescript
     - React
 - Backend Content Management System
-  - Sanity
+  - **Sanity**
     - Typescript
 
 https://www.handmadebyclaire.com/
