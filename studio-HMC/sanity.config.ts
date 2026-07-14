@@ -2,8 +2,7 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
-import { googleMapsInput } from "@sanity/google-maps-input";
-import frontPage from './schemaTypes/frontPage';
+
 
 
 export default defineConfig({
@@ -30,11 +29,7 @@ export default defineConfig({
           ]),
     }),
 
-    visionTool(),googleMapsInput({
-          apiKey: "REDACTED",
-          defaultZoom: 11,
-          defaultLocation: {lat: 49.28890171937164, lng: -123.11113162539405}
-     }),
+    visionTool()
   
     ],
   schema: {
