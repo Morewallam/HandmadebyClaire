@@ -14,11 +14,122 @@ const {
 } = Astro.props;
 ---
 
-<div
-  class=`relative flex w-full ${gap} overflow-x-auto ${padding} ${margin} scroll-smooth
-  [scroll-snap-type:x_mandatory] [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`
->
-  {center && <div class="flex-1 shrink-0 min-w-8" />}
-  <slot />
-  {center && <div class="flex-1 shrink-0 min-w-8" />}
+<div class={`relative w-full ${margin}`} data-hscroll-wrapper>
+  <div
+    data-hscroll
+    class={`flex w-full ${gap} overflow-x-auto ${padding}
+      scroll-smooth [scroll-snap-type:x_mandatory] [overscroll-behavior-x:contain]
+      [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
+  >
+    {center && <div class="flex-1 shrink-0 min-w-8" />}
+    <slot />
+    {center && <div class="flex-1 shrink-0 min-w-8" />}
+  </div>
+
+  <button
+    type="button"
+    data-hscroll-prev
+    aria-label="Scroll left"
+    class="hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center
+      rounded-full bg-white shadow-md transition-opacity duration-200 hover:bg-gray-50"
+  >
+    <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5">
+      <path
+        d="M15 19l-7-7 7-7"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+  </button>
+
+  <button
+    type="button"
+    data-hscroll-next
+    aria-label="Scroll right"
+    class="hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 h-10 w-10 items-center justify-center
+      rounded-full bg-white shadow-md transition-opacity duration-200 hover:bg-gray-50"
+  >
+    <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5">
+      <path
+        d="M9 5l7 7-7 7"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+  </button>
 </div>
+
+<script>
+  function initHorizontalScrollers() {
+    const wrappers = document.querySelectorAll<HTMLElement>(
+      "[data-hscroll-wrapper]",
+    );
+
+    wrappers.forEach((wrapper) => {
+      if (wrapper.dataset.hscrollInit === "true") return;
+
+      const scroller = wrapper.querySelector<HTMLElement>(
+        ":scope > [data-hscroll]",
+      );
+      const prevBtn = wrapper.querySelector<HTMLButtonElement>(
+        ":scope > [data-hscroll-prev]",
+      );
+      const nextBtn = wrapper.querySelector<HTMLButtonElement>(
+        ":scope > [data-hscroll-next]",
+      );
+      if (!scroller || !prevBtn || !nextBtn) return;
+
+      const threshold = 4;
+
+      const update = () => {
+        const { scrollLeft, scrollWidth, clientWidth } = scroller;
+        const canScroll = scrollWidth - clientWidth > threshold;
+
+        if (!canScroll) {
+          prevBtn.classList.add("hidden");
+          nextBtn.classList.add("hidden");
+          return;
+        }
+
+        const atStart = scrollLeft <= threshold;
+        const atEnd = scrollLeft + clientWidth >= scrollWidth - threshold;
+
+        prevBtn.classList.toggle("hidden", atStart);
+        prevBtn.classList.toggle("flex", !atStart);
+
+        nextBtn.classList.toggle("hidden", atEnd);
+        nextBtn.classList.toggle("flex", !atEnd);
+      };
+
+      const scrollAmount = () => {
+        const firstChild = scroller.querySelector<HTMLElement>(":scope > *");
+        return firstChild
+          ? firstChild.getBoundingClientRect().width + 24 //24 from gap-6 that is used on the flex,
+          : scroller.clientWidth * 0.8;
+      };
+
+      prevBtn.addEventListener("click", () => {
+        scroller.scrollBy({ left: -scrollAmount(), behavior: "smooth" });
+      });
+
+      nextBtn.addEventListener("click", () => {
+        scroller.scrollBy({ left: scrollAmount(), behavior: "smooth" });
+      });
+
+      scroller.addEventListener("scroll", update, { passive: true });
+
+      const resizeObserver = new ResizeObserver(update);
+      resizeObserver.observe(scroller);
+
+      const mutationObserver = new MutationObserver(update);
+      mutationObserver.observe(scroller, { childList: true, subtree: true });
+
+      update();
+
+      wrapper.dataset.hscrollInit = "true";
+    });
+  }
+  document.addEventListener("DOMContentLoaded", initHorizontalScrollers);
+</script>

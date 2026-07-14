@@ -20,19 +20,6 @@ const { events, limit = 2 } = Astro.props;
       ))
     }
   </div>
-
-  <!-- <HorizontalScroll padding="" gap="gap-4">
-    {
-      events.map((evt, i: number) => (
-        <div
-          id={"eventcard" + String(i)}
-          class="oldcard shrink-0 snap-center first:pl-8 last:pr-8"
-        >
-          <EventCard eventToDisplay={evt} />
-        </div>
-      ))
-    }
-  </HorizontalScroll> -->
 </event-manager>
 
 <style>
@@ -51,12 +38,20 @@ const { events, limit = 2 } = Astro.props;
       let limit = Number(this.dataset.limit ?? 3);
 
       const date = new Date();
+      date.setHours(0, 0, 0, 0);
 
       events.map((evt, i) => {
         let eventelm = document.getElementById("eventcard" + String(i));
-        const evtDate = new Date(evt.date);
+        const dateValues = evt.date.split("-");
+        const evtDate = new Date();
+        evtDate.setFullYear(
+          parseInt(dateValues[0]),
+          parseInt(dateValues[1]) - 1,
+          parseInt(dateValues[2]),
+        );
+        evtDate.setHours(0, 0, 0, 0);
 
-        if (evtDate.valueOf() - date.valueOf() > 0 && limit > 0) {
+        if (evtDate.valueOf() - date.valueOf() >= 0 && limit > 0) {
           eventelm?.classList.remove("oldcard");
           limit = limit - 1;
         }

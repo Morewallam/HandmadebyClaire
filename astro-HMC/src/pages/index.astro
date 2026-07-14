@@ -17,6 +17,7 @@ import MainLayout from "../layouts/MainLayout.astro";
 import StoreCard from "../components/StoreCard.astro";
 
 import EventManager from "../components/EventManager.astro";
+import type { eventType } from "../components/EventCard.astro";
 
 const FRONT_PAGE_QUERY = `*[
   _type == "frontPage"][0]{
@@ -143,7 +144,7 @@ const stores = await sanityClient.fetch<
 <MainLayout title="Handmade By Claire">
   <div class="bg-olive-200">
     <div>
-      <div id="Main Image" class="relative w-full h-[95vh] overflow-hidden">
+      <div id="Main Image" class="relative w-full h-[95svh] overflow-hidden">
         <ImageRender
           image={front_page_info.main_image}
           style="w-full h-full object-cover object-center"
