@@ -10,6 +10,7 @@ import type { SanityImageSource } from "@sanity/image-url";
 import type { PortableTextBlock, Slug } from "sanity";
 import type { HalfProduct } from "../../components/ArtProduct.astro";
 import { toPlainText } from "../../helper/plainTextPortable";
+import ImageRender from "../../components/ImageRender.astro";
 
 export interface Product extends HalfProduct {
   subImages?: SanityImageSource[];
@@ -122,7 +123,14 @@ export async function getStaticPaths(): paths {
             class="max-w-105 h-120 rounded-xl flex items-center justify-center overflow-hidden"
           >
             <img
-              src={urlFor(product.mainImage).height(500).url()}
+              src={urlFor(product.mainImage).height(500).auto("format").url()}
+              srcset={[
+                `${urlFor(product.mainImage).width(200).auto("format").url()} 200w`,
+                `${urlFor(product.mainImage).width(400).auto("format").url()} 400w`,
+                `${urlFor(product.mainImage).width(800).auto("format").url()} 800w`,
+                `${urlFor(product.mainImage).width(1200).auto("format").url()} 1200w`,
+              ].join(", ")}
+              sizes="auto"
               alt={product.name}
               class="w-full h-full rounded-xl object-contain drop-shadow-lg/30 p-5"
               id="main-img"
@@ -134,13 +142,32 @@ export async function getStaticPaths(): paths {
               <HorizontalScroll gap="" padding="" center={true}>
                 <ScrollCard padding="p-1">
                   <button
-                    data-thumb={urlFor(product.mainImage).height(500).url()}
+                    data-src={urlFor(product.mainImage)
+                      .height(500)
+                      .auto("format")
+                      .url()}
+                    data-srcset={[
+                      `${urlFor(product.mainImage).width(200).auto("format").url()} 200w`,
+                      `${urlFor(product.mainImage).width(400).auto("format").url()} 400w`,
+                      `${urlFor(product.mainImage).width(800).auto("format").url()} 800w`,
+                      `${urlFor(product.mainImage).width(1200).auto("format").url()} 1200w`,
+                    ].join(", ")}
                     class:list={[
                       "thumb border-2 border-indigo-500 rounded-lg overflow-hidden w-24 h-24 flex-shrink-0 transition-transform duration-300 hover:scale-105 hover:cursor-pointer shadow",
                     ]}
                   >
                     <img
-                      src={urlFor(product.mainImage).height(100).url()}
+                      src={urlFor(product.mainImage)
+                        .height(100)
+                        .auto("format")
+                        .url()}
+                      srcset={[
+                        `${urlFor(product.mainImage).width(100).auto("format").url()} 100w`,
+                        `${urlFor(product.mainImage).width(200).auto("format").url()} 200w`,
+                        `${urlFor(product.mainImage).width(400).auto("format").url()} 400w`,
+                      ].join(", ")}
+                      sizes="auto"
+                      loading="lazy"
                       alt={product.name}
                       class="w-full h-full object-contain"
                     />
@@ -150,14 +177,27 @@ export async function getStaticPaths(): paths {
                 {product.subImages.map((image) => (
                   <ScrollCard padding="p-1">
                     <button
-                      data-thumb={urlFor(image).height(500).url()}
+                      data-src={urlFor(image).height(500).auto("format").url()}
+                      data-srcset={[
+                        `${urlFor(image).width(200).auto("format").url()} 200w`,
+                        `${urlFor(image).width(400).auto("format").url()} 400w`,
+                        `${urlFor(image).width(800).auto("format").url()} 800w`,
+                        `${urlFor(image).width(1200).auto("format").url()} 1200w`,
+                      ].join(", ")}
                       class:list={[
                         "thumb border-2 rounded-lg overflow-hidden w-24 h-24 flex-shrink-0 transition-colors",
                         "border-transparent transition-transform duration-300 hover:scale-105 hover:cursor-pointer shadow",
                       ]}
                     >
                       <img
-                        src={urlFor(image).height(100).url()}
+                        src={urlFor(image).height(100).auto("format").url()}
+                        srcset={[
+                          `${urlFor(image).width(100).auto("format").url()} 100w`,
+                          `${urlFor(image).width(200).auto("format").url()} 200w`,
+                          `${urlFor(image).width(400).auto("format").url()} 400w`,
+                        ].join(", ")}
+                        sizes="auto"
+                        loading="lazy"
                         alt={product.name}
                         class="w-full h-full object-contain"
                       />
@@ -175,8 +215,10 @@ export async function getStaticPaths(): paths {
             .querySelectorAll<HTMLButtonElement>(".thumb")
             .forEach((btn) => {
               btn.addEventListener("click", () => {
-                const src = btn.dataset.thumb!;
+                const src = btn.dataset.src!;
+                const srcset = btn.dataset.srcset!;
                 mainImg.src = src;
+                mainImg.srcset = srcset;
                 document.querySelectorAll(".thumb").forEach((t) => {
                   t.classList.remove("border-indigo-500");
                   t.classList.add("border-transparent");

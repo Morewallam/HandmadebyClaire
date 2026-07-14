@@ -222,12 +222,14 @@ const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
         >
           {
             quoteLines.map((line) => (
-              <h1 class="p-2 text-l sm:text-2xl md:text-4xl font-bold">
+              <h1 class="p-2 text-xl sm:text-3xl md:text-4xl font-bold text-center">
                 {line}
               </h1>
             ))
           }
-          <p class="mt-5 text-md sm:text-xl md:text-3xl">-{quoteParts[1]}</p>
+          <p class="mt-5 text-l sm:text-2xl md:text-3xl">
+            -{quoteParts[1]}
+          </p>
         </div>
 
         <!-- Message fades in after quote -->

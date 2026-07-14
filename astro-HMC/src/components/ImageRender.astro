@@ -11,17 +11,32 @@ export interface Props {
   alt: string;
 }
 
-const { image, width, height, style, alt } = Astro.props;
+const { image, width, height, style, alt, id } = Astro.props;
 
-let imgUrl = urlFor(image);
-
+let imgUrl = urlFor(image).auto("format");
+let baseUrl = imgUrl;
 if (width) {
-  imgUrl = imgUrl.width(width);
+  baseUrl = baseUrl.width(width);
 }
 
 if (height) {
-  imgUrl = imgUrl.height(height);
+  baseUrl = baseUrl.height(height);
 }
 ---
 
-<img src={imgUrl.url()} alt={alt} class={style} />
+<img
+  src={baseUrl.url()}
+  loading="lazy"
+  srcset={[
+    `${imgUrl.width(200).url()} 200w`,
+    `${imgUrl.width(400).url()} 400w`,
+    `${imgUrl.width(800).url()} 800w`,
+    `${imgUrl.width(1200).url()} 1200w`,
+    `${imgUrl.width(1500).url()} 1500w`,
+    `${imgUrl.width(2000).url()} 2000w`,
+    `${imgUrl.width(2500).url()} 2500w`,
+  ].join(", ")}
+  alt={alt}
+  sizes="auto"
+  class={style}
+/>
