@@ -1,11 +1,22 @@
+import { toHTML } from "@portabletext/to-html";
+import type { PortableTextBlock } from "sanity";
 
 
-export function toPlainText(block:any) {
-    if (block._type !== 'block' || !block.children) {
-        return ''
-        }
-      // loop through the children spans, and join the
-      // text strings
-      return block.children.map((child: { text: any }) => child.text).join('')
+export function toPlainText(block:PortableTextBlock) {
+   const html=  toHTML(block, {
+  components: {
+    block: ({ children, value }) => {
+      const hasContent = value.children?.some(
+        (child) => child.text?.trim() !== "",
+      );
+      if (!hasContent) return "<br>";
+      return `<p>${children}</p>`;
+    },
+  },
+});
+return html.toString()
   
 }
+
+
+

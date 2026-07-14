@@ -21,6 +21,7 @@ const { image, name, slug, type = "theme", size = "small" } = Astro.props;
           <ImageRender
             image={image}
             height={100}
+            alt={name}
             style="w-full h-full object-contain rounded-md"
           />
         </div>
@@ -38,6 +39,7 @@ const { image, name, slug, type = "theme", size = "small" } = Astro.props;
       <div class="p-4 shadow-xs bg-stone-100 group transition-all duration-300 hover:scale-110 max-w-38 md:max-w-60  hover:shadow-lg ">
         <ImageRender
           image={image}
+          alt={name}
           width={500}
           style="aspect-rectangle drop-shadow object-cover h-30 w-30 md:h-40 md:w-40 object-center"
         />

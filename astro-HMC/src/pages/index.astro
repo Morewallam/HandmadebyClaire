@@ -126,6 +126,7 @@ const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
 <MainLayout
   title="Handmade By Claire"
   description={toPlainText(front_page_info.message)}
+  image={front_page_info.main_image}
 >
   <div class="bg-olive-200">
     <div>
@@ -202,12 +203,13 @@ const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
         <div
           id="video-placeholder"
           class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
-          style={`background-image: url(${urlFor(front_page_info.main_image).width(1600).url()})`}
+          style={`background-image: url(${urlFor(front_page_info.main_image).width(1600).url()}) alt("Background video of Claire making art")`}
         >
         </div>
         <!-- Video background -->
         <iframe
           id="quote-video"
+          title="quote video"
           src={`https://player.vimeo.com/video/${videoId}?background=1&autoplay=1&loop=1&muted=1&autopause=0`}
           class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-1000 ease-in-out"
           style="min-width: 177.77vh; min-height: 56.25vw; width: 100%; height: 100%;"
