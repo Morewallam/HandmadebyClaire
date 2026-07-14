@@ -76,7 +76,7 @@ const calendarEvents = events.flatMap((event: any) =>
       description: event.description,
       address: event.address,
       url: event.url,
-      image: urlFor(event.image).url(),
+      image: urlFor(event.image).width(500).url(),
     },
   })),
 );
@@ -203,7 +203,7 @@ const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
         <div
           id="video-placeholder"
           class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
-          style={`background-image: url(${urlFor(front_page_info.main_image).width(1600).url()}) alt("Background video of Claire making art")`}
+          style={`background-image: url(${urlFor(front_page_info.main_image).width(1000).url()})`}
         >
         </div>
         <!-- Video background -->
@@ -319,11 +319,10 @@ const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
   const video = document.getElementById("quote-video") as HTMLIFrameElement;
   const placeholder = document.getElementById("video-placeholder");
 
-  import Player from "@vimeo/player";
-
-  const player = new Player(video);
-  player.on("play", () => {
-    video.style.setProperty("opacity", "1");
-    placeholder?.style.setProperty("opacity", "0");
+  video.addEventListener("load", () => {
+    setTimeout(() => {
+      video.style.setProperty("opacity", "1");
+      placeholder?.style.setProperty("opacity", "0");
+    }, 1500);
   });
 </script>

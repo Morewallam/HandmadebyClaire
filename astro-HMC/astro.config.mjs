@@ -28,7 +28,7 @@ export default defineConfig({
     cssVariable: "--font-tempus",
     options: {
       variants: [{
-        src: ['./src/assets/TRTempusSansITC.ttf'],
+        src: ['./public/TRTempusSansITC.woff2'],
         weight: 'normal',
         style: 'normal'
       }]
