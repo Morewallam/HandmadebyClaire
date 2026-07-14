@@ -5,7 +5,7 @@ import { Font } from "astro:assets";
 import { urlFor } from "../helper/imageUrlHelper";
 ---
 
-<style>
+<style is:inline>
   html,
   body {
     overscroll-behavior-y: none;
@@ -28,7 +28,7 @@ import { urlFor } from "../helper/imageUrlHelper";
     <meta name="description" content={description} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <Font cssVariable="--font-tempus" />
+    <Font cssVariable="--font-tempus" preload />
   </head>
   <body class="font-seriff bg-olive-200">
     <header
@@ -249,7 +249,7 @@ import { urlFor } from "../helper/imageUrlHelper";
       </div>
     </footer>
 
-    <script>
+    <script is:inline>
       const toggle = document.getElementById("menu-toggle");
       const menu = document.getElementById("mobile-menu");
       const iconOpen = document.getElementById("icon-open");
