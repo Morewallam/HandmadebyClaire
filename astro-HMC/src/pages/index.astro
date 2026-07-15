@@ -76,7 +76,7 @@ const calendarEvents = events.flatMap((event: any) =>
       description: event.description,
       address: event.address,
       url: event.url,
-      image: urlFor(event.image).width(500).url(),
+      image: urlFor(event.image).width(800).auto("format").url(),
     },
   })),
 );
