@@ -15,10 +15,6 @@ export default defineConfig({
   vite: {
       plugins: [tailwindcss()],
     },
-
-  build: {
-    inlineStylesheets: 'auto',
-  },
   integrations: [sanity({
     projectId: "o6hp51kg",
     dataset: "production",
