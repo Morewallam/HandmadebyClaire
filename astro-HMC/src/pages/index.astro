@@ -268,7 +268,7 @@ const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
         </div>
       </div>
       <div class="bg-white/80 w-[95vw] lg:w-md xl:w-lg rounded-lg shadow-md">
-        <Calendar events={calendarEvents} client:visible />
+        <Calendar events={calendarEvents} client:load />
       </div>
     </div>
 
@@ -302,24 +302,44 @@ const stores = await sanityClient.fetch<StoreType[]>(STORE_QUERY);
   const fadeOut = document.querySelector(".scroll-fade-out") as HTMLElement;
   const fadeIn = document.querySelector(".scroll-fade-in") as HTMLElement;
 
-  window.addEventListener("scroll", () => {
-    if (!hero || !fadeOut || !fadeIn) return;
+  let heroHeight = 0;
+  let heroOffsetTop = 0;
 
-    const heroHeight = hero.getBoundingClientRect().height;
-    const scrolled = window.scrollY - hero.offsetTop;
-    const progress = scrolled / heroHeight;
+  function measureHero() {
+    if (!hero) return;
+    heroHeight = hero.getBoundingClientRect().height;
+    heroOffsetTop = hero.offsetTop;
+  }
 
-    // Quote fades out between 0% and 15% scroll
-    const outProgress = Math.max(0, Math.min((progress - 0.05) / 0.2, 1));
-    fadeOut.style.opacity = String(1 - outProgress);
-    fadeOut.style.transform = `translateY(${-40 * outProgress}px)`;
+  measureHero();
+  window.addEventListener("resize", measureHero);
 
-    // Message fades in between 15% and 30% scroll
-    const inProgress = Math.max(0, Math.min((progress - 0.2) / 0.15, 1));
-    fadeIn.style.opacity = String(inProgress);
-    fadeIn.style.transform = `translateY(${40 * (1 - inProgress)}px)`;
-  });
+  let ticking = false;
 
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!hero || !fadeOut || !fadeIn) return;
+      if (ticking) return;
+
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrolled = window.scrollY - heroOffsetTop;
+        const progress = scrolled / heroHeight;
+
+        const outProgress = Math.max(0, Math.min((progress - 0.05) / 0.2, 1));
+        fadeOut.style.opacity = String(1 - outProgress);
+        fadeOut.style.transform = `translateY(${-40 * outProgress}px)`;
+
+        const inProgress = Math.max(0, Math.min((progress - 0.2) / 0.15, 1));
+        fadeIn.style.opacity = String(inProgress);
+        fadeIn.style.transform = `translateY(${40 * (1 - inProgress)}px)`;
+
+        ticking = false;
+      });
+    },
+    { passive: true },
+  );
   const video = document.getElementById("quote-video") as HTMLIFrameElement;
   const placeholder = document.getElementById("video-placeholder");
 
