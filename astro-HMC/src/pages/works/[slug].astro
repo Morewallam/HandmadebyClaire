@@ -86,7 +86,7 @@ export async function getStaticPaths(): paths {
 >
   <div class="bg-olive-50 text-gray-900">
     <div class="max-w-5xl mx-auto px-6 py-10">
-      <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-2 md:gap-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-2 md:gap-12">
         <div class="flex flex-col items gap-5">
           <div>
             <h1 class="text-3xl font-bold text-gray-900 mb-2">
@@ -118,12 +118,12 @@ export async function getStaticPaths(): paths {
           </div>
         </div>
 
-        <div class="flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4 md:col-span-2">
           <div
-            class="max-w-105 h-120 rounded-xl flex items-center justify-center overflow-hidden"
+            class="w-full h-80 sm:h-100 md:h-120 rounded-xl flex overflow-hidden"
           >
             <img
-              src={urlFor(product.mainImage).height(500).auto("format").url()}
+              src={urlFor(product.mainImage).width(500).auto("format").url()}
               srcset={[
                 `${urlFor(product.mainImage).width(200).auto("format").url()} 200w`,
                 `${urlFor(product.mainImage).width(400).auto("format").url()} 400w`,
@@ -132,69 +132,39 @@ export async function getStaticPaths(): paths {
               ].join(", ")}
               sizes="auto"
               alt={product.name}
-              class="w-full h-full rounded-xl object-contain drop-shadow-lg/30 p-5"
+              class="w-full h-full rounded-xl object-contain drop-shadow-lg/30 p-2"
               id="main-img"
             />
           </div>
-
-          {
-            product.subImages && (
-              <HorizontalScroll gap="" padding="" center={true}>
-                <ScrollCard padding="p-1">
-                  <button
-                    data-src={urlFor(product.mainImage)
-                      .height(500)
-                      .auto("format")
-                      .url()}
-                    data-srcset={[
-                      `${urlFor(product.mainImage).width(200).auto("format").url()} 200w`,
-                      `${urlFor(product.mainImage).width(400).auto("format").url()} 400w`,
-                      `${urlFor(product.mainImage).width(800).auto("format").url()} 800w`,
-                      `${urlFor(product.mainImage).width(1200).auto("format").url()} 1200w`,
-                    ].join(", ")}
-                    class:list={[
-                      "thumb border-2 border-indigo-500 rounded-lg overflow-hidden w-24 h-24 flex-shrink-0 transition-transform duration-300 hover:scale-105 hover:cursor-pointer shadow",
-                    ]}
-                  >
-                    <img
-                      src={urlFor(product.mainImage)
-                        .height(100)
-                        .auto("format")
-                        .url()}
-                      srcset={[
-                        `${urlFor(product.mainImage).width(100).auto("format").url()} 100w`,
-                        `${urlFor(product.mainImage).width(200).auto("format").url()} 200w`,
-                        `${urlFor(product.mainImage).width(400).auto("format").url()} 400w`,
-                      ].join(", ")}
-                      sizes="auto"
-                      loading="lazy"
-                      alt={product.name}
-                      class="w-full h-full object-contain"
-                    />
-                  </button>
-                </ScrollCard>
-
-                {product.subImages.map((image) => (
+          <div class="h-full">
+            {
+              product.subImages && (
+                <HorizontalScroll gap="" padding="" center={true}>
                   <ScrollCard padding="p-1">
                     <button
-                      data-src={urlFor(image).height(500).auto("format").url()}
+                      data-src={urlFor(product.mainImage)
+                        .width(500)
+                        .auto("format")
+                        .url()}
                       data-srcset={[
-                        `${urlFor(image).width(200).auto("format").url()} 200w`,
-                        `${urlFor(image).width(400).auto("format").url()} 400w`,
-                        `${urlFor(image).width(800).auto("format").url()} 800w`,
-                        `${urlFor(image).width(1200).auto("format").url()} 1200w`,
+                        `${urlFor(product.mainImage).width(200).auto("format").url()} 200w`,
+                        `${urlFor(product.mainImage).width(400).auto("format").url()} 400w`,
+                        `${urlFor(product.mainImage).width(800).auto("format").url()} 800w`,
+                        `${urlFor(product.mainImage).width(1200).auto("format").url()} 1200w`,
                       ].join(", ")}
                       class:list={[
-                        "thumb border-2 rounded-lg overflow-hidden w-24 h-24 flex-shrink-0 transition-colors",
-                        "border-transparent transition-transform duration-300 hover:scale-105 hover:cursor-pointer shadow",
+                        "thumb border-2 border-indigo-500 rounded-lg overflow-hidden max-w-32 h-32 flex-shrink-0 transition-transform duration-300 hover:scale-105 hover:cursor-pointer shadow",
                       ]}
                     >
                       <img
-                        src={urlFor(image).height(100).auto("format").url()}
+                        src={urlFor(product.mainImage)
+                          .height(100)
+                          .auto("format")
+                          .url()}
                         srcset={[
-                          `${urlFor(image).width(100).auto("format").url()} 100w`,
-                          `${urlFor(image).width(200).auto("format").url()} 200w`,
-                          `${urlFor(image).width(400).auto("format").url()} 400w`,
+                          `${urlFor(product.mainImage).width(100).auto("format").url()} 100w`,
+                          `${urlFor(product.mainImage).width(200).auto("format").url()} 200w`,
+                          `${urlFor(product.mainImage).width(400).auto("format").url()} 400w`,
                         ].join(", ")}
                         sizes="auto"
                         loading="lazy"
@@ -203,10 +173,44 @@ export async function getStaticPaths(): paths {
                       />
                     </button>
                   </ScrollCard>
-                ))}
-              </HorizontalScroll>
-            )
-          }
+
+                  {product.subImages.map((image) => (
+                    <ScrollCard padding="p-1">
+                      <button
+                        data-src={urlFor(image)
+                          .height(500)
+                          .auto("format")
+                          .url()}
+                        data-srcset={[
+                          `${urlFor(image).width(200).auto("format").url()} 200w`,
+                          `${urlFor(image).width(400).auto("format").url()} 400w`,
+                          `${urlFor(image).width(800).auto("format").url()} 800w`,
+                          `${urlFor(image).width(1200).auto("format").url()} 1200w`,
+                        ].join(", ")}
+                        class:list={[
+                          "thumb border-2 rounded-lg overflow-hidden max-w-32 h-32 flex-shrink-0 transition-colors",
+                          "border-transparent transition-transform duration-300 hover:scale-105 hover:cursor-pointer shadow",
+                        ]}
+                      >
+                        <img
+                          src={urlFor(image).height(100).auto("format").url()}
+                          srcset={[
+                            `${urlFor(image).width(100).auto("format").url()} 100w`,
+                            `${urlFor(image).width(200).auto("format").url()} 200w`,
+                            `${urlFor(image).width(400).auto("format").url()} 400w`,
+                          ].join(", ")}
+                          sizes="auto"
+                          loading="lazy"
+                          alt={product.name}
+                          class="w-full h-full object-contain"
+                        />
+                      </button>
+                    </ScrollCard>
+                  ))}
+                </HorizontalScroll>
+              )
+            }
+          </div>
         </div>
 
         <script>
