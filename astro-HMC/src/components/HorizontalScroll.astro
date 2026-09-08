@@ -62,6 +62,8 @@ const {
 </div>
 
 <script>
+  import { computeRect } from "@fullcalendar/core/internal.js";
+
   function initHorizontalScrollers() {
     const wrappers = document.querySelectorAll<HTMLElement>(
       "[data-hscroll-wrapper]",
@@ -80,6 +82,14 @@ const {
         ":scope > [data-hscroll-next]",
       );
       if (!scroller || !prevBtn || !nextBtn) return;
+
+      const computedStyle = window.getComputedStyle(scroller);
+      let gapNumber = 0;
+      if (computedStyle.gap == "normal") {
+        gapNumber = 0;
+      } else {
+        gapNumber = parseFloat(computedStyle.gap);
+      }
 
       const threshold = 4;
 
@@ -105,8 +115,9 @@ const {
 
       const scrollAmount = () => {
         const firstChild = scroller.querySelector<HTMLElement>(":scope > *");
+
         return firstChild
-          ? firstChild.getBoundingClientRect().width + 24 //24 from gap-6 that is used on the flex,
+          ? firstChild.getBoundingClientRect().width + gapNumber //4 times the gap used to jump the right amount of pixels.
           : scroller.clientWidth * 0.8;
       };
 
