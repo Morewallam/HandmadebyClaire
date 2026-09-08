@@ -21,9 +21,9 @@ const {
       scroll-smooth [scroll-snap-type:x_mandatory] [overscroll-behavior-x:contain]
       [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
   >
-    {center && <div class="flex-1 shrink-0 min-w-8" />}
+    {center && <div class="flex-1 shrink-0 min-w-8" data-hscroll-spacer />}
     <slot />
-    {center && <div class="flex-1 shrink-0 min-w-8" />}
+    {center && <div class="flex-1 shrink-0 min-w-8" data-hscroll-spacer />}
   </div>
 
   <button
@@ -62,8 +62,6 @@ const {
 </div>
 
 <script>
-  import { computeRect } from "@fullcalendar/core/internal.js";
-
   function initHorizontalScrollers() {
     const wrappers = document.querySelectorAll<HTMLElement>(
       "[data-hscroll-wrapper]",
@@ -91,7 +89,11 @@ const {
         gapNumber = parseFloat(computedStyle.gap);
       }
 
-      const threshold = 4;
+      const spacer = scroller.querySelector<HTMLElement>(
+        ":scope > [data-hscroll-spacer]",
+      );
+
+      const threshold = spacer ? spacer?.getBoundingClientRect().width + 4 : 4;
 
       const update = () => {
         const { scrollLeft, scrollWidth, clientWidth } = scroller;
@@ -114,10 +116,12 @@ const {
       };
 
       const scrollAmount = () => {
-        const firstChild = scroller.querySelector<HTMLElement>(":scope > *");
+        const firstChild = scroller.querySelector<HTMLElement>(
+          ":scope > *:not([data-hscroll-spacer])",
+        );
 
         return firstChild
-          ? firstChild.getBoundingClientRect().width + gapNumber //4 times the gap used to jump the right amount of pixels.
+          ? firstChild.getBoundingClientRect().width + gapNumber //the gap of the flex container
           : scroller.clientWidth * 0.8;
       };
 
